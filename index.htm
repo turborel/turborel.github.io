@@ -4,22 +4,117 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>turborel - Open-source relational database</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        a, a:visited {
+            color: #BB3400;
+            cursor: pointer;
+        }
+
+        body {
+            font-family: "Work Sans", sans-serif;
+            font-optical-sizing: auto;
+            font-weight: <weight>;
+            font-style: normal;
+            margin: 0;
+            background: #5C282B;
+            overflow-x: clip; /* the terminal's shadow can spill past the edge on phones */
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 10px 20px;
+        }
+
+        header {
+            color: white;
+        }
+
+        .hero {
+            display: flex;
+            gap: 32px;
+            align-items: flex-start;
+            margin: 20px 0 40px;
+        }
+
+        .box {
+            flex: 0 0 340px;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 4px 0 rgb(36,42,51), 0 18px 0 -9px rgb(28,33,40), 0 19.8px 11px -9px rgb(39,45,54);
+        }
+
+        .box p:first-child {
+            margin-top: 0;
+        }
+
+        .box p:last-child {
+            margin-bottom: 0;
+        }
+
+        .image {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+
+        /* cli.png has 40px of transparent padding around a 700px-wide window.
+           Scale the image up and pull it out by that padding, so the visible
+           terminal fills the column and its top lines up with the box. */
+        .image img {
+            display: block;
+            width: calc(100% * 780 / 700);
+            max-width: none;
+            height: auto;
+            margin: calc(-100% * 40 / 700);
+        }
+
+        .footer {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        @media (max-width: 800px) {
+            .hero {
+                flex-direction: column;
+            }
+
+            .box,
+            .image {
+                flex: none;
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div style="width: 100%; max-width: 760px; margin: 0 auto; padding: 10px;">
+    <div class="container">
         <header>
             <h1>turborel</h1>
         </header>
 
         <main>
-            <p>turborel (TUR-boh-rel) is a relational database system written in Rust. It is an original design, not a fork of an existing database, and built to be extended throughout from storage engines, index methods, functions, optimizer rules, and more. It is licensed under the BSD 2-Clause License.</p>
+            <div class="hero">
+                <div class="box">
+                    <p>turborel (TUR-boh-rel) is a relational database system written in <a target="_blank" href="https://rust-lang.org/">Rust</a>. It is not a fork of an existing database, and built to be extended throughout from storage engines, index methods, functions, optimizer rules, and more. It is licensed under the <a target="_blank" href="https://github.com/turborel/turborel/blob/main/LICENSE">BSD 2-Clause</a> License.</p>
 
-            <p>The project is still in its early stages and under very active development. Bug reports, feature requests, and feedback are all welcome. While the core architecture takes shape, we're not accepting pull requests yet, but that will change as the project matures.</p>
+                    <p>The project is still in its early stages and under very active development. Bug reports, feature requests, and feedback are all welcome. While the core architecture takes shape, we're not accepting pull requests yet, but that will change as the project matures.</p>
 
-            <p><a target="_blank" href="https://github.com/turborel/turborel">Github</a>
+                    <p><a target="_blank" href="https://github.com/turborel/turborel">GitHub</a></p>
+                </div>
+                <div class="image">
+                    <img src="assets/cli.png" alt="turborel command-line client running a SELECT query">
+                </div>
+            </div>
+        </main>
 
-        <footer>
-                &copy; 2026 turborel
+        <footer class="footer">
+            &copy; 2026 turborel
         </footer>
     </div>
 </body>
