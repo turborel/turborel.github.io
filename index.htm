@@ -16,8 +16,8 @@
       gtag('config', 'G-XDW3XF90B8');
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+        
         *, *::before, *::after {
             box-sizing: border-box;
         }
@@ -75,6 +75,28 @@
             min-width: 0;
         }
 
+      .header {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;      /* vertically centers img and h1 */
+            gap: 12px;                /* space between mascot and text */
+            height: 28px;            
+            width: 100%;
+            font-family: "EB Garamond", serif;
+        }
+
+        .header img {
+            display: block;
+            height: 100%;             /* mascot fills the full header height */
+            width: auto;
+        }
+
+        .header h1 {
+            margin: 0;                /* removes the default h1 margin that pushes it off-center */
+            line-height: 1;
+            font-size: 22px;
+        }
+
         .image img {
             display: block;
             width: calc(100% * 780 / 700);
@@ -102,8 +124,8 @@
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>turborel</h1>
+        <header class="header">
+            <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
         </header>
 
         <main>
