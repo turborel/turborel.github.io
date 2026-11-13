@@ -68,6 +68,24 @@ a:hover { color: var(--rust-dark); text-decoration: underline; }
 .site-nav a:hover { color: #fff; }
 .site-nav a[aria-current="page"] { color: #fff; border-bottom: 2px solid var(--accent); }
 
+/* menu: the phone menu button (see _includes/menu.njk); same in home.html */
+.menu-toggle {
+  display: none; margin-left: auto; width: 40px; height: 36px; padding: 0;
+  align-items: center; justify-content: center;
+  border: 0; background: none; color: #F1DDD2; cursor: pointer;
+}
+.menu-toggle:hover { color: #fff; }
+.menu-toggle .bars, .menu-toggle .bars::before, .menu-toggle .bars::after {
+  display: block; width: 18px; height: 2px; background: currentColor; transition: transform 0.2s, background-color 0.2s;
+}
+.menu-toggle .bars { position: relative; }
+.menu-toggle .bars::before, .menu-toggle .bars::after { content: ""; position: absolute; left: 0; }
+.menu-toggle .bars::before { top: -6px; }
+.menu-toggle .bars::after { top: 6px; }
+.menu-toggle[aria-expanded="true"] .bars { background: transparent; }
+.menu-toggle[aria-expanded="true"] .bars::before { transform: translateY(6px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .bars::after { transform: translateY(-6px) rotate(-45deg); }
+
 /* ---- related bar ------------------------------------------------------ */
 
 .relbar { background: var(--maroon-deep); color: #E9D6CC; font-size: 13.5px; line-height: 1.5; }
@@ -306,6 +324,11 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
 }
 @media (max-width: 520px) {
   .site-nav { width: 100%; } /* on its own line under the name, as on the home page */
+  .js .menu-toggle { display: inline-flex; }
+  .js .site-nav { display: none; }
+  .js .site-nav.open { display: flex; flex-direction: column; gap: 0; margin-top: -6px; }
+  .js .site-nav.open a { padding: 11px 0; border-top: 1px solid rgba(241, 221, 210, 0.15); border-bottom: 0; font-size: 16px; }
+  .js .site-nav.open a[aria-current="page"] { font-weight: 600; }
   /* share buttons as icons only; the names stay for screen readers */
   .share a, .share button { padding: 9px; }
   .share a span, .share button span {

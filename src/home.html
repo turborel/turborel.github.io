@@ -5,6 +5,7 @@ eleventyExcludeFromCollections: true
 <!doctype html>
 <html lang="en">
 <head>
+    <script>document.documentElement.classList.add("js")</script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Turborel - Open-source relational database</title>
@@ -139,6 +140,52 @@ eleventyExcludeFromCollections: true
             color: #FFFFFF;
             text-decoration: underline;
         }
+
+        /* menu: the phone menu button (see _includes/menu.njk); same in site.css */
+        .menu-toggle {
+            display: none;
+            margin-left: auto;
+            width: 40px;
+            height: 36px;
+            padding: 0;
+            align-items: center;
+            justify-content: center;
+            border: 0;
+            background: none;
+            color: #F1DDD2;
+            cursor: pointer;
+        }
+
+        .menu-toggle:hover {
+            color: #FFFFFF;
+        }
+
+        .menu-toggle .bars,
+        .menu-toggle .bars::before,
+        .menu-toggle .bars::after {
+            display: block;
+            width: 18px;
+            height: 2px;
+            background: currentColor;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .menu-toggle .bars {
+            position: relative;
+        }
+
+        .menu-toggle .bars::before,
+        .menu-toggle .bars::after {
+            content: "";
+            position: absolute;
+            left: 0;
+        }
+
+        .menu-toggle .bars::before { top: -6px; }
+        .menu-toggle .bars::after { top: 6px; }
+        .menu-toggle[aria-expanded="true"] .bars { background: transparent; }
+        .menu-toggle[aria-expanded="true"] .bars::before { transform: translateY(6px) rotate(45deg); }
+        .menu-toggle[aria-expanded="true"] .bars::after { transform: translateY(-6px) rotate(-45deg); }
 
         /* same as .site-footer on the docs and blog (site.css) */
         .footer {
@@ -367,15 +414,27 @@ eleventyExcludeFromCollections: true
                 grid-template-columns: minmax(0, 1fr);
             }
 
+            /* the whirlwind goes behind the tagline: both in the same cell */
             .cover {
                 grid-template-columns: minmax(0, 1fr);
-                gap: 12px;
-                padding: 24px 0 32px;
+                padding: 16px 0 28px;
+            }
+
+            .cover > * {
+                grid-area: 1 / 1;
             }
 
             .vortex {
-                max-width: 380px;
+                max-width: 420px;
                 margin: 0 auto;
+                opacity: 0.5;
+            }
+
+            .cover .tagline {
+                position: relative;
+                z-index: 1;
+                align-self: center;
+                text-shadow: 0 2px 18px rgba(46, 18, 20, 0.6);
             }
         }
 
@@ -384,6 +443,27 @@ eleventyExcludeFromCollections: true
                 margin-left: 0; /* on its own line under the name, as on the docs and blog */
                 width: 100%;
             }
+
+            .js .menu-toggle {
+                display: inline-flex;
+            }
+
+            .js .site-nav {
+                display: none;
+            }
+
+            .js .site-nav.open {
+                display: flex;
+                flex-direction: column;
+                gap: 0;
+                margin-top: 6px;
+            }
+
+            .js .site-nav.open a {
+                padding: 11px 0;
+                border-top: 1px solid rgba(241, 221, 210, 0.15);
+                font-size: 16px;
+            }
         }
     </style>
 </head>
@@ -391,7 +471,8 @@ eleventyExcludeFromCollections: true
     <div class="container">
         <header class="header">
             <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
-            <nav class="site-nav" aria-label="Site">
+            {% include "menu.njk" %}
+            <nav class="site-nav" id="site-nav" aria-label="Site">
                 <a href="/docs/">Docs</a>
                 <a href="/blog/">Blog</a>
                 <a href="https://github.com/turborel/turborel">GitHub</a>

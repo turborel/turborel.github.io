@@ -217,6 +217,7 @@ src/_data/docs.js             doc/ → pages: URLs, links, contents, versions
 src/_data/releases.js         the releases list, for the home page
 src/_data/people.js           blog authors: name and website
 src/_data/site.js             site name, links, social accounts, home page list lengths
+src/_includes/menu.njk        the menu button for the nav on phones
 src/_includes/share.njk       share buttons at the end of a post
 src/_includes/social-links.njk  footer icons for the project's accounts
 lib/icons.js                  icons, share links and the social list

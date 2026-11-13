@@ -27,6 +27,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="/assets/css/site.css">
+<script>document.documentElement.classList.add("js")</script>
 {% for block in extraHead or [] %}{{ block | safe }}
 {% endfor %}{% if jsonld %}<script type="application/ld+json">{{ jsonld | jsonld | safe }}</script>
 {% endif %}{% if site.analytics %}<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics }}"></script>
@@ -41,7 +42,8 @@
       <img src="/assets/turborel-mascot-white.svg" alt="" width="17" height="28">
       <span>TURBOREL</span>
     </a>
-    <nav class="site-nav" aria-label="Site">
+    {% include "menu.njk" %}
+    <nav class="site-nav" id="site-nav" aria-label="Site">
       <a href="/docs/"{% if section == "docs" %} aria-current="page"{% endif %}>Docs</a>
       <a href="/blog/"{% if section == "blog" %} aria-current="page"{% endif %}>Blog</a>
       <a href="{{ site.github }}">GitHub</a>

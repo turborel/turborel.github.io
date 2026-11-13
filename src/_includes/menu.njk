@@ -1,0 +1,23 @@
+{#- The phone menu: a button that shows and hides #site-nav on small screens
+    (CSS in site.css and home.html, under "menu"). Without JavaScript the
+    button never appears and the links stay visible. -#}
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span class="bars" aria-hidden="true"></span></button>
+<script>
+(function () {
+  // The nav comes after this script, so it's looked up when needed.
+  var button = document.currentScript.previousElementSibling;
+  function set(open) {
+    var nav = document.getElementById("site-nav");
+    if (!nav) return;
+    button.setAttribute("aria-expanded", open ? "true" : "false");
+    nav.classList.toggle("open", open);
+  }
+  button.addEventListener("click", function () { set(button.getAttribute("aria-expanded") !== "true"); });
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && button.getAttribute("aria-expanded") === "true") { set(false); button.focus(); }
+  });
+  document.addEventListener("click", function (e) {
+    if (e.target.closest("#site-nav a")) set(false);
+  });
+})();
+</script>
