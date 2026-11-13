@@ -18,7 +18,9 @@
 {% endif %}{% if ogImage and ogImageAlt %}<meta property="og:image:alt" content="{{ ogImageAlt }}">
 {% elif not ogImage %}<meta property="og:image:alt" content="The turborel mascot and name">
 {% endif %}<meta name="twitter:card" content="summary_large_image">
-<meta name="theme-color" content="#5C282B">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#120D0E" media="(prefers-color-scheme: dark)">
 <link rel="icon" href="/assets/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
 <link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
@@ -30,7 +32,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;600&display=swap">
 <link rel="stylesheet" href="{{ '/assets/css/site.css' | versioned }}">
-<script>document.documentElement.classList.add("js")</script>
+{% include "theme-head.njk" %}
 {% for block in extraHead or [] %}{{ block | safe }}
 {% endfor %}{% if jsonld %}<script type="application/ld+json">{{ jsonld | jsonld | safe }}</script>
 {% endif %}{% if site.analytics %}<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics }}"></script>
@@ -45,6 +47,7 @@
       <img src="/assets/turborel-mascot-white.svg" alt="" width="17" height="28">
       <span>TURBOREL</span>
     </a>
+    {% include "theme-toggle.njk" %}
     {% include "menu.njk" %}
     <nav class="site-nav" id="site-nav" aria-label="Site">
       <a href="/docs/"{% if section == "docs" %} aria-current="page"{% endif %}>Docs</a>

@@ -5,7 +5,7 @@ eleventyExcludeFromCollections: true
 <!doctype html>
 <html lang="en">
 <head>
-    <script>document.documentElement.classList.add("js")</script>
+    {% include "theme-head.njk" %}
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Turborel - Open-source relational database</title>
@@ -25,7 +25,9 @@ eleventyExcludeFromCollections: true
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="The turborel mascot and name">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="theme-color" content="#5C282B">
+    <meta name="color-scheme" content="light dark">
+    <meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#120D0E" media="(prefers-color-scheme: dark)">
     <link rel="alternate" type="application/atom+xml" title="The turborel blog" href="/blog/feed.xml">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDW3XF90B8"></script>
     <script>
@@ -46,7 +48,7 @@ eleventyExcludeFromCollections: true
             scrollbar-gutter: stable; /* same as site.css, so the header doesn't shift on long docs pages */
         }
 
-        a, a:visited {
+        a {
             color: #BB3400;
             cursor: pointer;
         }
@@ -133,6 +135,7 @@ eleventyExcludeFromCollections: true
         }
 
         .site-nav {
+            order: 1;
             margin-left: auto;
             display: flex;
             flex-wrap: wrap;
@@ -141,8 +144,7 @@ eleventyExcludeFromCollections: true
             font-size: 15px;
         }
 
-        .site-nav a,
-        .site-nav a:visited {
+        .site-nav a {
             color: #F1DDD2;
             text-decoration: none;
         }
@@ -152,10 +154,43 @@ eleventyExcludeFromCollections: true
             text-decoration: underline;
         }
 
+        /* the light / dark switch (see _includes/theme-toggle.njk); same in site.css */
+        .theme-toggle {
+            order: 2;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            margin: -6px -8px -6px 0;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: #F1DDD2;
+            cursor: pointer;
+        }
+
+        .theme-toggle[hidden] {
+            display: none;
+        }
+
+        .theme-toggle:hover {
+            color: #FFFFFF;
+        }
+
+        .theme-toggle .sun,
+        :where(:root[data-theme="dark"]) .theme-toggle .moon {
+            display: none;
+        }
+
+        :where(:root[data-theme="dark"]) .theme-toggle .sun {
+            display: block;
+        }
+
         /* menu: the phone menu button (see _includes/menu.njk); same in site.css */
         .menu-toggle {
+            order: 3;
             display: none;
-            margin-left: auto;
             width: 40px;
             height: 36px;
             padding: 0;
@@ -211,8 +246,7 @@ eleventyExcludeFromCollections: true
             margin: 0;
         }
 
-        .footer a,
-        .footer a:visited {
+        .footer a {
             color: #F1DDD2;
             text-decoration: none;
         }
@@ -334,8 +368,7 @@ eleventyExcludeFromCollections: true
             text-align: center;
         }
 
-        .notice a,
-        .notice a:visited {
+        .notice a {
             margin-left: 6px;
             color: #BB3400;
             font-weight: 500;
@@ -372,8 +405,7 @@ eleventyExcludeFromCollections: true
                 text-align: left;
             }
 
-            .notice a,
-            .notice a:visited {
+            .notice a {
                 display: inline-block;
                 margin: 2px 0 0;
             }
@@ -511,8 +543,13 @@ eleventyExcludeFromCollections: true
 
         @media (max-width: 520px) {
             .site-nav {
+                order: 4;
                 margin-left: 0; /* on its own line under the name, as on the docs and blog */
                 width: 100%;
+            }
+
+            .theme-toggle {
+                margin: 0 0 0 auto;
             }
 
             .js .menu-toggle {
@@ -534,6 +571,74 @@ eleventyExcludeFromCollections: true
                 padding: 11px 0;
                 border-top: 1px solid rgba(241, 221, 210, 0.15);
                 font-size: 16px;
+            }
+        }
+        /* dark mode: on when <html data-theme="dark"> (theme-head.njk sets it
+           from the reader's choice or the system's); same palette as site.css */
+        @media screen {
+            :root[data-theme="dark"] {
+                color-scheme: dark;
+            }
+
+            :where(:root[data-theme="dark"]) body {
+                background: #120D0E;
+            }
+
+            :where(:root[data-theme="dark"]) a {
+                color: #F0956A;
+            }
+
+            :where(:root[data-theme="dark"]) a:hover {
+                color: #F8B795;
+            }
+
+            :where(:root[data-theme="dark"]) .box {
+                background: #1C1617;
+                color: #E9E0DB;
+                box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.7), 0 18px 0 -9px #0B0809, 0 19.8px 11px -9px rgba(0, 0, 0, 0.8);
+            }
+
+            :where(:root[data-theme="dark"]) .updates h2 {
+                color: #F3E7E0;
+            }
+
+            :where(:root[data-theme="dark"]) .feed p {
+                color: #E9E0DB;
+            }
+
+            :where(:root[data-theme="dark"]) .feed li {
+                border-bottom-color: #3A2E2F;
+            }
+
+            :where(:root[data-theme="dark"]) .feed time,
+            :where(:root[data-theme="dark"]) .feed .tag {
+                color: #A89A93;
+            }
+
+            :where(:root[data-theme="dark"]) .feed .latest {
+                background: #2C2324;
+                color: #F0956A;
+            }
+
+            :where(:root[data-theme="dark"]) .notice {
+                background: #2A2021;
+                color: #EADBD3;
+            }
+
+            :where(:root[data-theme="dark"]) .notice a {
+                color: #F4B08A;
+            }
+
+            :where(:root[data-theme="dark"]) .notice a:hover {
+                color: #F8C9AE;
+            }
+
+            :where(:root[data-theme="dark"]) .notice-close {
+                color: #A89A93;
+            }
+
+            :where(:root[data-theme="dark"]) .notice-close:hover {
+                color: #FFFFFF;
             }
         }
     </style>
@@ -566,6 +671,7 @@ eleventyExcludeFromCollections: true
     <div class="container">
         <header class="header">
             <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
+            {% include "theme-toggle.njk" %}
             {% include "menu.njk" %}
             <nav class="site-nav" id="site-nav" aria-label="Site">
                 <a href="/docs/">Docs</a>

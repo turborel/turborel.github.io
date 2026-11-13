@@ -55,7 +55,7 @@ a:hover { color: var(--rust-dark); text-decoration: underline; }
 /* ---- header ---------------------------------------------------------- */
 
 .site-header .wrap {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  display: flex; flex-wrap: wrap; align-items: center;
   gap: 12px 16px; padding-top: 20px; padding-bottom: 18px;
 }
 .brand { display: flex; align-items: center; gap: 12px; color: #fff; }
@@ -63,14 +63,25 @@ a:hover { color: var(--rust-dark); text-decoration: underline; }
 .brand img { display: block; height: 28px; width: auto; }
 .brand span { font-family: var(--serif); font-size: 22px; font-weight: 700; line-height: 1; }
 
-.site-nav { display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 15px; line-height: 1.2; }
+.site-nav { order: 1; margin-left: auto; display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 15px; line-height: 1.2; }
 .site-nav a { color: #F1DDD2; padding: 5px 0 3px; border-bottom: 2px solid transparent; } /* text lines up with the home page's nav */
 .site-nav a:hover { color: #fff; }
 .site-nav a[aria-current="page"] { color: #fff; border-bottom: 2px solid var(--accent); }
 
+/* the light / dark switch (see _includes/theme-toggle.njk); same in home.html */
+.theme-toggle {
+  order: 2; display: inline-flex; align-items: center; justify-content: center;
+  width: 36px; height: 36px; margin: -6px -8px -6px 0; padding: 0;
+  border: 0; background: none; color: #F1DDD2; cursor: pointer;
+}
+.theme-toggle[hidden] { display: none; }
+.theme-toggle:hover { color: #fff; }
+.theme-toggle .sun, :where(:root[data-theme="dark"]) .theme-toggle .moon { display: none; }
+:where(:root[data-theme="dark"]) .theme-toggle .sun { display: block; }
+
 /* menu: the phone menu button (see _includes/menu.njk); same in home.html */
 .menu-toggle {
-  display: none; margin-left: auto; width: 40px; height: 36px; padding: 0;
+  order: 3; display: none; width: 40px; height: 36px; padding: 0;
   align-items: center; justify-content: center;
   border: 0; background: none; color: #F1DDD2; cursor: pointer;
 }
@@ -310,6 +321,67 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
 .share a:hover, .share button:hover { border-color: var(--rust); color: var(--rust); text-decoration: none; }
 .share .icon { flex: none; }
 
+/* ---- dark mode -------------------------------------------------------- */
+/* On when <html data-theme="dark">: set before drawing by theme-head.njk,
+   from the reader's choice (the sun/moon button) or else the system's.
+   The oxblood page becomes a warm near-black, white sheets a warm charcoal,
+   and rust links a soft coral that reads on dark. Print always stays light.
+   Keep in step with home.html. */
+
+@media screen {
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --maroon-ink: #F3E7E0;            /* headings */
+    --rust: #F0956A;
+    --rust-dark: #F8B795;
+    --ink: #E9E0DB;
+    --muted: #A89A93;
+    --rule: #3A2E2F;
+    --band: #261E1F;
+    --code-bg: #211A1A;
+    --code-rule: #3D3030;
+    --out-bg: #1A1415;
+    --inline-code: #2B2223;
+    --shadow: 0 2px 4px 0 rgba(0,0,0,0.7), 0 18px 0 -9px #0B0809, 0 19.8px 11px -9px rgba(0,0,0,0.8);
+  }
+  :where(:root[data-theme="dark"]) body { background: #120D0E; }
+  :where(:root[data-theme="dark"]) .relbar { background: #1B1415; }
+  :where(:root[data-theme="dark"]) .skip, :where(:root[data-theme="dark"]) .sheet, :where(:root[data-theme="dark"]) .share a, :where(:root[data-theme="dark"]) .share button { background: #1C1617; }
+
+  :where(:root[data-theme="dark"]) .version summary, :where(:root[data-theme="dark"]) .version-menu { background: #1C1617; border-color: #3A2E2F; }
+  :where(:root[data-theme="dark"]) .version-menu { box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+  :where(:root[data-theme="dark"]) .sidebar .version-menu a:hover { background: #261E1F; color: var(--ink); }
+  :where(:root[data-theme="dark"]) .sidebar .version-menu a[aria-current] { background: #2C2324; }
+  :where(:root[data-theme="dark"]) .version-note { border-top-color: #3A2E2F; }
+  :where(:root[data-theme="dark"]) .search-row input { background: #1C1617; color: var(--ink); border-color: #3A2E2F; }
+  :where(:root[data-theme="dark"]) .search-row button { background: #2C2324; color: var(--ink); border-color: #3A2E2F; }
+  :where(:root[data-theme="dark"]) .search-row button:hover { background: #3A2E2F; }
+
+  :where(:root[data-theme="dark"]) .headerlink { color: #6E5F5A; }
+  :where(:root[data-theme="dark"]) .doc blockquote { color: #CBBFB9; }
+  :where(:root[data-theme="dark"]) .post-body > p:first-child { color: #E5DAD4; }
+  :where(:root[data-theme="dark"]) .doc tbody tr:nth-child(even) td { background: #201919; }
+
+  :where(:root[data-theme="dark"]) .admonition { border-color: #5A4328; background: #241B13; }
+  :where(:root[data-theme="dark"]) .admonition .admonition-title { background: #33261A; color: #F4C9A0; }
+  :where(:root[data-theme="dark"]) .admonition.note { border-color: #3A3232; background: #1F1A1A; }
+  :where(:root[data-theme="dark"]) .admonition.note .admonition-title { background: #2A2323; color: var(--ink); }
+
+  :where(:root[data-theme="dark"]) .token.keyword, :where(:root[data-theme="dark"]) .token.important, :where(:root[data-theme="dark"]) .token.selector { color: #F0956A; }
+  :where(:root[data-theme="dark"]) .token.string, :where(:root[data-theme="dark"]) .token.char, :where(:root[data-theme="dark"]) .token.attr-value, :where(:root[data-theme="dark"]) .token.regex { color: #8DB8E8; }
+  :where(:root[data-theme="dark"]) .token.number, :where(:root[data-theme="dark"]) .token.boolean, :where(:root[data-theme="dark"]) .token.constant { color: #9CCB8A; }
+  :where(:root[data-theme="dark"]) .token.comment, :where(:root[data-theme="dark"]) .token.prolog, :where(:root[data-theme="dark"]) .token.doctype, :where(:root[data-theme="dark"]) .token.cdata { color: #8E807A; }
+  :where(:root[data-theme="dark"]) .token.function, :where(:root[data-theme="dark"]) .token.macro, :where(:root[data-theme="dark"]) .token.property { color: #C9A3E6; }
+  :where(:root[data-theme="dark"]) .token.builtin, :where(:root[data-theme="dark"]) .token.class-name, :where(:root[data-theme="dark"]) .token.type-definition { color: #E3B868; }
+  :where(:root[data-theme="dark"]) .token.operator, :where(:root[data-theme="dark"]) .token.punctuation { color: #C4B6B0; }
+  :where(:root[data-theme="dark"]) .token.variable, :where(:root[data-theme="dark"]) .token.lifetime-annotation, :where(:root[data-theme="dark"]) .token.attribute { color: #F0956A; }
+  :where(:root[data-theme="dark"]) .token.table, :where(:root[data-theme="dark"]) .token.key { color: #F3E7E0; }
+  :where(:root[data-theme="dark"]) .token.deleted { color: #F08080; }
+  :where(:root[data-theme="dark"]) .token.inserted { color: #8FCB8F; }
+
+  :where(:root[data-theme="dark"]) #search { --pagefind-ui-background: #1C1617; --pagefind-ui-tag: #2C2324; }
+}
+
 /* ---- small screens ---------------------------------------------------- */
 
 @media (max-width: 860px) {
@@ -323,7 +395,8 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
   .sidebar > .sb-top { order: -1; }
 }
 @media (max-width: 520px) {
-  .site-nav { width: 100%; } /* on its own line under the name, as on the home page */
+  .site-nav { order: 4; width: 100%; margin-left: 0; } /* on its own line under the name, as on the home page */
+  .theme-toggle { margin: 0 0 0 auto; }
   .js .menu-toggle { display: inline-flex; }
   .js .site-nav { display: none; }
   .js .site-nav.open { display: flex; flex-direction: column; gap: 0; margin-top: -6px; }

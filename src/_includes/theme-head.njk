@@ -1,0 +1,25 @@
+{#- Runs first thing in <head>: marks JavaScript as on, and picks the theme
+    before anything is drawn (no flash): the reader's choice if they made
+    one, else the system's. With no choice saved it keeps following the
+    system as that changes. The dark styles are keyed on data-theme="dark". -#}
+<script>
+(function () {
+  var root = document.documentElement, key = "turborel-theme", saved = null;
+  root.classList.add("js");
+  try { saved = localStorage.getItem(key); } catch (e) {}
+  var system = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function apply(theme) {
+    root.setAttribute("data-theme", theme);
+    var metas = document.querySelectorAll('meta[name="theme-color"]');
+    for (var i = 0; i < metas.length; i++) metas[i].setAttribute("content", theme === "dark" ? "#120D0E" : "#5C282B");
+  }
+  window.turborelTheme = { key: key, apply: apply };
+  apply(saved === "dark" || saved === "light" ? saved : system && system.matches ? "dark" : "light");
+  if (system && system.addEventListener) system.addEventListener("change", function (e) {
+    var s = null;
+    try { s = localStorage.getItem(key); } catch (x) {}
+    if (!s) apply(e.matches ? "dark" : "light");
+  });
+  document.addEventListener("DOMContentLoaded", function () { apply(root.getAttribute("data-theme")); });
+})();
+</script>

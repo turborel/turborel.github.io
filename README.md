@@ -198,6 +198,14 @@ which isn't in that set.
 
 `src/blog/posts/posts.11tydata.js` lists every front-matter field.
 
+## Light and dark
+
+Pages follow the visitor's system setting until they press the sun / moon
+button in the header; their choice is then remembered in the browser
+(`localStorage` key `turborel-theme`). Without JavaScript the site stays light.
+Dark colours live in the `[data-theme="dark"]` block of `site.css` and,
+for the home page, of `home.html`: change both together.
+
 ## Working locally
 
 Needs Node 20 or later.
@@ -229,6 +237,8 @@ src/_data/releases.js         the releases list, for the home page
 src/_data/people.js           blog authors: name and website
 src/_data/site.js             site name, links, social accounts, home page list lengths
 src/_includes/menu.njk        the menu button for the nav on phones
+src/_includes/theme-head.njk  picks light or dark before the page draws
+src/_includes/theme-toggle.njk  the sun / moon button in the header
 src/_includes/share.njk       share buttons at the end of a post
 src/_includes/social-links.njk  footer icons for the project's accounts
 lib/icons.js                  icons, share links and the social list
@@ -240,6 +250,7 @@ src/blog/                     blog index, tags, feed (feed.njk)
 src/blog/posts/               the posts; posts.11tydata.js documents front matter
 src/blog/images/              cover images
 src/blog/files/               attachments (create it with the first one)
-src/assets/css/site.css       the design
+src/assets/css/site.css       the design (dark colours: the [data-theme="dark"] block;
+                              home.html has its own copy)
 .github/workflows/deploy.yml  build and publish
 ```
