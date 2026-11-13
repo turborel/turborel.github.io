@@ -10,7 +10,8 @@
     "build": "npm run fetch-docs && npm run build:site && npm run build:search",
     "start": "eleventy --serve",
     "dev": "npm run fetch-docs && npm run build:site && npm run build:search && eleventy --serve --incremental",
-    "og-image": "node scripts/og-image.mjs"
+    "og-image": "node scripts/og-image.mjs",
+    "favicons": "node scripts/favicons.mjs"
   },
   "engines": {
     "node": ">=20"

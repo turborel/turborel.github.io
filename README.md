@@ -243,6 +243,9 @@ src/_includes/share.njk       share buttons at the end of a post
 src/_includes/social-links.njk  footer icons for the project's accounts
 lib/icons.js                  icons, share links and the social list
 scripts/og-image.mjs          renders scripts/og/og-image.html → src/assets/og-image.png
+scripts/favicons.mjs          draws every favicon from scripts/favicon/*.svg
+                              (npm run favicons)
+src/_includes/favicons.njk    the favicon and manifest tags, for every page
 scripts/fetch-docs.js         releases → .cache/docs/<version>/doc and
                               .cache/docs/releases.json
 lib/markdown.js               Markdown + build-time highlighting, for docs and blog

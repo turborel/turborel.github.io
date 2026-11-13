@@ -18,6 +18,7 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("src/blog/files/**"); // copied as is, never rendered (.md, .html…)
   eleventyConfig.ignores.add("src/blog/images/**");
   eleventyConfig.addPassthroughCopy("CNAME");
+  eleventyConfig.addPassthroughCopy({ "src/assets/favicon.ico": "favicon.ico" }); // browsers also ask for /favicon.ico
 
   eleventyConfig.addFilter("abs", (url) => new URL(url || "/", site.url).href);
   eleventyConfig.addFilter("jsonld", (obj) => JSON.stringify(obj).replace(/</g, "\\u003c"));

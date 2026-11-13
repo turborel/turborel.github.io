@@ -21,10 +21,7 @@
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#120D0E" media="(prefers-color-scheme: dark)">
-<link rel="icon" href="/assets/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/assets/site.webmanifest">
+{% include "favicons.njk" %}
 <link rel="alternate" type="application/atom+xml" title="The turborel blog" href="/blog/feed.xml">
 {% if prevUrl %}<link rel="prev" href="{{ prevUrl }}">
 {% endif %}{% if nextUrl %}<link rel="next" href="{{ nextUrl }}">
