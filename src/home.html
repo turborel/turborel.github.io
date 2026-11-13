@@ -66,7 +66,7 @@ eleventyExcludeFromCollections: true
             width: 100%;
             max-width: 1100px;
             margin: 0 auto;
-            padding: 10px 20px;
+            padding: 0 20px 10px; /* the header sits above it, on its own */
         }
 
         header {
@@ -103,18 +103,19 @@ eleventyExcludeFromCollections: true
             min-width: 0;
         }
 
-      /* The header's band runs the full width of the window (the margins
-         pull it out to the edges, the padding keeps its contents in line)
-         and is frosted: the page shows through, blurred, as it scrolls
-         under. Same as site.css. */
+      /* The header is its own full-width band, outside .container (as on
+         the docs and blog: a sticky header inside .container, which clips
+         sideways on phones, shook on iPhone). The side padding lines its
+         contents up with .container's. Frosted: the page shows through,
+         blurred, as it scrolls under. Same as site.css. */
         .header {
             display: flex;
             align-items: center;      /* vertically centers img and h1 */
             gap: 12px;                /* space between mascot and text */
             min-height: 28px;
             flex-wrap: wrap;
-            margin: 0 calc(50% - 50vw) -2px;
-            padding: 10px calc(50vw - 50%) 12px;
+            margin-top: 10px;
+            padding: 10px max(20px, calc(50% - 530px));
             background: #5C282B;
             border-bottom: 1px solid transparent;
             transition: border-color 0.2s;
@@ -697,19 +698,18 @@ eleventyExcludeFromCollections: true
     })();
     </script>
     {%- endif %}
+    <header class="header">
+        <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
+        {% include "theme-toggle.njk" %}
+        {% include "menu.njk" %}
+        <nav class="site-nav" id="site-nav" aria-label="Site">
+            <a href="/docs/">Docs</a>
+            <a href="/blog/">Blog</a>
+            <a href="https://github.com/turborel/turborel">GitHub</a>
+            <a href="https://forms.gle/YNJ5YGpBTFW9vvTj8">Newsletter</a>
+        </nav>
+    </header>
     <div class="container">
-        <header class="header">
-            <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
-            {% include "theme-toggle.njk" %}
-            {% include "menu.njk" %}
-            <nav class="site-nav" id="site-nav" aria-label="Site">
-                <a href="/docs/">Docs</a>
-                <a href="/blog/">Blog</a>
-                <a href="https://github.com/turborel/turborel">GitHub</a>
-                <a href="https://forms.gle/YNJ5YGpBTFW9vvTj8">Newsletter</a>
-            </nav>
-        </header>
-
         <main>
             <section class="cover">
                 <h2 class="tagline">Built for What You&rsquo;re Building <em>Next</em></h2>
