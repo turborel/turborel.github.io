@@ -103,7 +103,10 @@ to GitHub at the same version.
   JSON-LD: `TechArticle` and `BreadcrumbList` for docs, `BlogPosting` for
   posts (with every author, and the cover with its credit and license).
 - A post's cover is its share picture (`og:image`, and a large card on
-  X); pages without one use the logo.
+  X); every other page, the home page included, uses
+  `src/assets/og-image.png`: the mascot and the name, 1200×630. It's
+  made from `scripts/og/og-image.html`; after editing that, run
+  `npm run og-image` (needs Chrome or Chromium) and commit the PNG.
 - Pages are plain HTML. Code is highlighted at build time; the version menu
   works without JavaScript. Only search uses it.
 - Search is [Pagefind](https://pagefind.app/), indexed at build time:
@@ -229,6 +232,7 @@ src/_includes/menu.njk        the menu button for the nav on phones
 src/_includes/share.njk       share buttons at the end of a post
 src/_includes/social-links.njk  footer icons for the project's accounts
 lib/icons.js                  icons, share links and the social list
+scripts/og-image.mjs          renders scripts/og/og-image.html → src/assets/og-image.png
 scripts/fetch-docs.js         releases → .cache/docs/<version>/doc and
                               .cache/docs/releases.json
 lib/markdown.js               Markdown + build-time highlighting, for docs and blog
