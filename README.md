@@ -176,6 +176,14 @@ highlighted; unlabelled ones are shown as plain output, as in the manuals.
   from those sites, nothing tracked); the list is `shareTargets` in
   `lib/icons.js`.
 
+## Notice bar
+
+A thin bar across the top of the home page, for news or an event. Set it
+under `notice` in `src/_data/site.js`: `text`, an optional `link` and
+`linkText`, and an `id`. Readers can close it and the browser remembers;
+a notice with a new `id` shows again, even to those who closed the last
+one. `text: ""` hides it.
+
 ## Social accounts
 
 The footer of every page, the home page's included, shows GitHub and the

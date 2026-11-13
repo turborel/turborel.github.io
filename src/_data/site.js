@@ -20,6 +20,13 @@ export default {
     instagram: "",
     facebook: "https://www.facebook.com/turborel",
   },
+  // The bar across the top of the home page. Readers can close it; give a
+  // new notice a new id and it shows again, even to those who closed the
+  // last one. text: "" hides it.
+  notice: {
+    id: "in-alpha",
+    text: "Alpha in progress ⭐ Star the repo to stay in the loop.",
+  },
   analytics: "G-XDW3XF90B8", // Google Analytics, as on the home page; "" to drop it
   author: "Turborel contributors",
   homePosts: 3, // newest blog posts listed on the home page

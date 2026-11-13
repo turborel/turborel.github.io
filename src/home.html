@@ -312,6 +312,66 @@ eleventyExcludeFromCollections: true
             }
         }
 
+        /* the notice bar across the top (site.notice); closable */
+        .notice {
+            position: relative;
+            padding: 9px 48px;
+            background: #F7EDE6;
+            color: #45191C;
+            font-size: 14px;
+            line-height: 1.45;
+            text-align: center;
+        }
+
+        .notice a,
+        .notice a:visited {
+            margin-left: 6px;
+            color: #BB3400;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .notice a:hover {
+            color: #8A2600;
+        }
+
+        .notice-close {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            padding: 0;
+            border: 0;
+            background: none;
+            color: #6B5E5A;
+            font-size: 22px;
+            line-height: 1;
+            cursor: pointer;
+        }
+
+        .notice-close:hover {
+            color: #45191C;
+        }
+
+        @media (max-width: 520px) {
+            .notice {
+                padding: 9px 44px 9px 16px;
+                text-align: left;
+            }
+
+            .notice a,
+            .notice a:visited {
+                display: inline-block;
+                margin: 2px 0 0;
+            }
+
+            .notice span {
+                display: block;
+            }
+        }
+
         /* latest posts and releases, under the hero; the columns line up
            with the intro card and the terminal above them */
         .updates {
@@ -468,6 +528,30 @@ eleventyExcludeFromCollections: true
     </style>
 </head>
 <body>
+    {%- if site.notice and site.notice.text %}
+    <div class="notice" role="region" aria-label="Notice" data-notice="{{ site.notice.id }}">
+        <span>{{ site.notice.text }}</span>{% if site.notice.link %}<a href="{{ site.notice.link }}">{{ site.notice.linkText or "Read more" }} &rarr;</a>{% endif %}
+        <button class="notice-close" type="button" aria-label="Close this notice" hidden>&times;</button>
+    </div>
+    <script>
+    (function () {
+      // Closed before? Then remove it before it's drawn. The close button
+      // only appears when this can be remembered (JavaScript, storage).
+      var bar = document.currentScript.previousElementSibling;
+      var key = "turborel-notice-closed";
+      var id = bar.getAttribute("data-notice");
+      try {
+        if (localStorage.getItem(key) === id) { bar.remove(); return; }
+      } catch (e) {}
+      var close = bar.querySelector(".notice-close");
+      close.hidden = false;
+      close.addEventListener("click", function () {
+        try { localStorage.setItem(key, id); } catch (e) {}
+        bar.remove();
+      });
+    })();
+    </script>
+    {%- endif %}
     <div class="container">
         <header class="header">
             <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
