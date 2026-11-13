@@ -1,0 +1,26 @@
+---
+layout: base.njk
+section: docs
+permalink: /search/
+title: Search — turborel
+description: Search the turborel documentation and blog.
+noindex: true
+crumbs: [{ label: "turborel", url: "/" }, { label: "Search" }]
+extraHead: ['<link rel="stylesheet" href="/pagefind/pagefind-ui.css">']
+---
+<div class="wrap layout single">
+  <main id="content" class="sheet">
+    <h1 class="page-title">Search</h1>
+    <p class="lede">Searches the documentation for the latest release, and the blog.</p>
+    <div id="search"></div>
+    <noscript><p>Search needs JavaScript. The <a href="/docs/">contents</a> and <a href="/docs/appendix/">appendices</a> list every page.</p></noscript>
+  </main>
+</div>
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    var ui = new PagefindUI({ element: "#search", showSubResults: true, showImages: false, resetStyles: false, autofocus: true });
+    var q = new URLSearchParams(location.search).get("q");
+    if (q) ui.triggerSearch(q);
+  });
+</script>

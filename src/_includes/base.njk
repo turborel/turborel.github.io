@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ metaTitle or title }}</title>
+<meta name="description" content="{{ description or site.description }}">
+<link rel="canonical" href="{{ (canonical or page.url) | abs }}">
+{% if noindex %}<meta name="robots" content="noindex, follow">
+{% endif %}<meta property="og:type" content="{{ ogType or 'website' }}">
+<meta property="og:site_name" content="turborel">
+<meta property="og:title" content="{{ ogTitle or title }}">
+<meta property="og:description" content="{{ description or site.description }}">
+<meta property="og:url" content="{{ (canonical or page.url) | abs }}">
+<meta property="og:image" content="{{ (ogImage or '/assets/android-chrome-512x512.png') | abs }}">
+{% if ogImage and ogImageAlt %}<meta property="og:image:alt" content="{{ ogImageAlt }}">
+{% endif %}<meta name="twitter:card" content="{{ 'summary_large_image' if ogImage else 'summary' }}">
+<meta name="theme-color" content="#5C282B">
+<link rel="icon" href="/assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/assets/site.webmanifest">
+<link rel="alternate" type="application/atom+xml" title="The turborel blog" href="/blog/feed.xml">
+{% if prevUrl %}<link rel="prev" href="{{ prevUrl }}">
+{% endif %}{% if nextUrl %}<link rel="next" href="{{ nextUrl }}">
+{% endif %}<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,400..700;1,400..700&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="/assets/css/site.css">
+{% for block in extraHead or [] %}{{ block | safe }}
+{% endfor %}{% if jsonld %}<script type="application/ld+json">{{ jsonld | jsonld | safe }}</script>
+{% endif %}{% if site.analytics %}<script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','{{ site.analytics }}');</script>
+{% endif %}</head>
+<body>
+<a class="skip" href="#content">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">
+      <img src="/assets/turborel-mascot-white.svg" alt="" width="17" height="28">
+      <span>TURBOREL</span>
+    </a>
+    <nav class="site-nav" aria-label="Site">
+      <a href="/docs/"{% if section == "docs" %} aria-current="page"{% endif %}>Docs</a>
+      <a href="/blog/"{% if section == "blog" %} aria-current="page"{% endif %}>Blog</a>
+      <a href="{{ site.github }}">GitHub</a>
+      <a href="{{ site.newsletter }}">Newsletter</a>
+    </nav>
+  </div>
+</header>
+
+{% if crumbs %}<div class="relbar">
+  <div class="wrap">
+    <nav aria-label="Breadcrumb"><ol>
+      {%- for c in crumbs -%}
+      <li>{% if c.url %}<a href="{{ c.url }}">{{ c.label }}</a>{% else %}<span aria-current="page">{{ c.label }}</span>{% endif %}</li>
+      {%- endfor -%}
+    </ol></nav>
+    {% if related %}<nav aria-label="Related" class="related">
+      {%- for r in related -%}{% if not loop.first %} | {% endif %}{% if r.url %}<a href="{{ r.url }}"{% if r.rel %} rel="{{ r.rel }}"{% endif %}>{{ r.label }}</a>{% else %}<span class="off">{{ r.label }}</span>{% endif %}{%- endfor -%}
+    </nav>{% endif %}
+  </div>
+</div>
+{% endif %}
+{{ content | safe }}
+
+<footer class="site-footer">
+  {% include "social-links.njk" %}
+  <p>© Copyright {{ site.year }}, {{ site.author }}. Licensed under the <a href="{{ site.github }}/blob/main/LICENSE">BSD 2-Clause License</a>.</p>
+  {% if footerNote %}<p>{{ footerNote | safe }}</p>{% endif %}
+</footer>
+</body>
+</html>

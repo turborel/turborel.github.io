@@ -1,0 +1,140 @@
+---js
+{
+  pagination: { data: "docs.pages", size: 1, alias: "doc", addAllPagesToCollections: false },
+  permalink: (data) => data.doc.url,
+  layout: "base.njk",
+  section: "docs",
+  eleventyComputed: {
+    title: (data) =>
+      data.doc.crumbs.length === 1
+        ? `turborel ${data.doc.version.title} documentation`
+        : `${data.doc.title} — turborel ${data.doc.version.title} documentation`,
+    description: (data) => data.doc.description,
+    canonical: (data) => data.doc.canonical,
+    noindex: (data) => data.doc.noindex,
+    ogType: () => "article",
+    ogTitle: (data) => data.doc.title,
+    crumbs: (data) => data.doc.crumbs,
+    prevUrl: (data) => data.doc.prev && data.doc.prev.url,
+    nextUrl: (data) => data.doc.next && data.doc.next.url,
+    related: (data) => [
+      { label: "index", url: data.doc.root },
+      { label: "previous", url: data.doc.prev && data.doc.prev.url, rel: "prev" },
+      { label: "next", url: data.doc.next && data.doc.next.url, rel: "next" },
+    ],
+    footerNote: (data) => {
+      const v = data.doc.version;
+      const day = new Date(v.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+      return `Last updated ${day} · built from <a href="https://github.com/${data.site.repo}/tree/${v.refName}">${data.site.repo}@${v.sha}</a> (${v.label}).`;
+    },
+    jsonld: (data) => {
+      const d = data.doc;
+      const abs = (u) => new URL(u, data.site.url).href;
+      const crumbs = d.crumbs.map((c, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        name: c.label,
+        ...(c.url ? { item: abs(c.url) } : { item: abs(d.url) }),
+      }));
+      return [
+        {
+          "@context": "https://schema.org",
+          "@type": "TechArticle",
+          headline: d.title,
+          description: d.description,
+          url: abs(d.canonical),
+          inLanguage: "en",
+          dateModified: d.version.date,
+          version: d.version.label,
+          isPartOf: { "@type": "WebSite", name: "turborel", url: data.site.url },
+          publisher: { "@type": "Organization", name: "turborel", url: data.site.url, logo: abs("/assets/android-chrome-512x512.png") },
+        },
+        { "@context": "https://schema.org", "@type": "BreadcrumbList", itemListElement: crumbs },
+      ];
+    },
+  },
+}
+---
+<div class="wrap layout">
+  <aside class="sidebar">
+    <div class="sb-block sb-top">
+      <h2 class="sb-title">Version</h2>
+      <details class="version">
+        <summary aria-label="Documentation version: {{ doc.version.label }}. Choose another">
+          <span><strong>{{ doc.version.label }}</strong> <span class="muted">· {{ doc.version.sub }}</span></span>
+          <svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        </summary>
+        <div class="version-menu">
+          <ul>
+          {%- for v in doc.switcher %}
+            <li><a href="{{ v.url }}"{% if v.current %} aria-current="true"{% endif %}><span><strong>{{ v.label }}</strong> <span class="muted">· {{ v.sub }}</span></span>{% if v.current %}<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>{% endif %}</a></li>
+          {%- endfor %}
+          </ul>
+          <p class="version-note">{{ docs.menuNote }}</p>
+        </div>
+      </details>
+    </div>
+
+    <form class="sb-block sb-top search" role="search" action="/search/" method="get">
+      <label class="sb-title" for="q">Quick search</label>
+      <div class="search-row">
+        <input id="q" name="q" type="search" placeholder="e.g. FETCH, SQLSTATE" autocomplete="off">
+        <button type="submit">Go</button>
+      </div>
+    </form>
+
+    {% if doc.toc.length %}
+    <nav class="sb-block" aria-labelledby="toc-title">
+      <h2 class="sb-title" id="toc-title">Table of Contents</h2>
+      <ul class="toc">
+      {%- for h in doc.toc %}
+        <li class="toc-{{ h.level }}"><a href="#{{ h.id }}">{{ h.title }}</a></li>
+      {%- endfor %}
+      </ul>
+    </nav>
+    {% endif %}
+
+    <div class="sb-block sb-extra">
+      {% if doc.prev %}<h2 class="sb-title">Previous topic</h2>
+      <p><a href="{{ doc.prev.url }}">{{ doc.prev.title }}</a></p>{% endif %}
+      {% if doc.next %}<h2 class="sb-title">Next topic</h2>
+      <p><a href="{{ doc.next.url }}">{{ doc.next.title }}</a></p>{% endif %}
+    </div>
+
+    <div class="sb-block sb-extra">
+      <h2 class="sb-title">This Page</h2>
+      <ul>
+        <li><a href="{{ doc.permalink }}" title="{{ doc.permalinkNote }}">Permanent link</a></li>
+        <li><a href="{{ doc.sourceUrl }}">Show Source</a></li>
+        <li><a href="{{ site.github }}/issues/new?title={{ ('Docs: ' + doc.title) | urlencode }}">Report a problem</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <main id="content" class="sheet"{% if doc.indexable %} data-pagefind-body{% endif %}>
+    {% if doc.banner %}
+    <div class="admonition {{ 'warning' if doc.version.kind != 'release' else 'note' }}" role="note" data-pagefind-ignore>
+      <p class="admonition-title">{{ doc.banner.title }}</p>
+      <p>{{ doc.banner.text }}{% if doc.banner.link %} <a href="{{ doc.banner.link.url }}">{{ doc.banner.link.label }}</a>{% endif %}</p>
+    </div>
+    {% endif %}
+    <article class="doc">
+      {{ doc.html | safe }}
+    </article>
+    {% if doc.prev or doc.next %}
+    <nav class="pager" aria-label="Pagination" data-pagefind-ignore>
+      {% if doc.prev %}<a class="pager-prev" href="{{ doc.prev.url }}" rel="prev"><span>Previous</span>« {{ doc.prev.title }}</a>{% else %}<span></span>{% endif %}
+      {% if doc.next %}<a class="pager-next" href="{{ doc.next.url }}" rel="next"><span>Next</span>{{ doc.next.title }} »</a>{% endif %}
+    </nav>
+    {% endif %}
+  </main>
+</div>
+<script>
+// Close the version menu on a click elsewhere or Escape. Works without this too.
+(function () {
+  var d = document.querySelector("details.version");
+  if (!d) return;
+  document.addEventListener("click", function (e) { if (d.open && !d.contains(e.target)) d.open = false; });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && d.open) { d.open = false; d.querySelector("summary").focus(); } });
+})();
+</script>

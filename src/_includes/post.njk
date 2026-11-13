@@ -1,0 +1,52 @@
+---
+layout: base.njk
+section: blog
+ogType: article
+---
+<div class="wrap layout">
+  {% include "blog-sidebar.njk" %}
+  <main id="content" class="sheet" data-pagefind-body>
+    <article class="post doc">
+      <p class="kicker"><time datetime="{{ page.date | isoDate }}">{{ page.date | longDate }}</time>{% for t in tags | postTags %} · <a href="/blog/tags/{{ t | tagSlug }}/">{{ t }}</a>{% endfor %}</p>
+      <h1 class="post-title">{{ title }}</h1>
+      <p class="byline">By {{ postAuthors | authorLinks | safe }} · {{ content | readingTime }} min read</p>
+      {% if coverSrc %}<figure class="cover">
+        <img src="{{ coverSrc }}" alt="{{ coverAlt }}" width="1200" height="630">
+        {% set cr = coverCreditInfo %}
+        {% if coverCaption or cr %}<figcaption>
+          {% if coverCaption %}<span class="cover-caption">{{ coverCaption }}</span>{% endif %}
+          {% if cr %}<span class="cover-credit">
+            {%- if cr.name %}{{ cr.label }} {% if cr.url %}<a href="{{ cr.url }}" target="_blank" rel="noopener">{{ cr.name }}</a>{% else %}{{ cr.name }}{% endif %}{% endif %}
+            {%- if cr.source %}{{ " via " if cr.name else "From " }}{% if cr.sourceUrl %}<a href="{{ cr.sourceUrl }}" target="_blank" rel="noopener">{{ cr.source }}</a>{% else %}{{ cr.source }}{% endif %}{% endif %}
+            {%- if cr.license %}{{ " · " if (cr.name or cr.source) }}{% if cr.licenseUrl %}<a href="{{ cr.licenseUrl }}" rel="license noopener" target="_blank">{{ cr.license }}</a>{% else %}{{ cr.license }}{% endif %}{% endif -%}
+          </span>{% endif %}
+        </figcaption>{% endif %}
+      </figure>{% endif %}
+      <div class="post-body">
+        {{ content | newTabLinks | safe }}
+      </div>
+      {% if postAttachments.length %}
+      <section class="attachments" aria-labelledby="attachments-title">
+        <h2 id="attachments-title">Attachments</h2>
+        <ul>
+        {%- for f in postAttachments %}
+          <li>
+            <a href="{{ f.url }}"{% if f.type %} type="{{ f.type }}"{% endif %} target="_blank" rel="noopener">{{ f.title }}</a>
+            {%- set meta = [f.ext, f.sizeLabel] | select | join(" · ") %}
+            {%- if meta %} <span class="file-meta">{{ meta }}{% if f.external %} · external{% endif %}</span>{% elif f.external %} <span class="file-meta">external</span>{% endif %}
+            {%- if f.description %}<p>{{ f.description }}</p>{% endif %}
+          </li>
+        {%- endfor %}
+        </ul>
+      </section>
+      {% endif %}
+      {% include "share.njk" %}
+    </article>
+    {% set older = collections.posts | getPreviousCollectionItem(page) %}
+    {% set newer = collections.posts | getNextCollectionItem(page) %}
+    <nav class="pager" aria-label="More posts" data-pagefind-ignore>
+      {% if older %}<a class="pager-prev" href="{{ older.url }}" rel="prev"><span>Older post</span>« {{ older.data.title }}</a>{% else %}<span></span>{% endif %}
+      {% if newer %}<a class="pager-next" href="{{ newer.url }}" rel="next"><span>Newer post</span>{{ newer.data.title }} »</a>{% else %}<a class="pager-next" href="/blog/"><span>Back to</span>All posts »</a>{% endif %}
+    </nav>
+  </main>
+</div>

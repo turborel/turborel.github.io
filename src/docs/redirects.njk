@@ -1,0 +1,23 @@
+---js
+{
+  // Small pages that send old addresses on (see `redirects` in
+  // src/_data/docs.js): /docs/alpha/... once releases exist.
+  pagination: { data: "docs.redirects", size: 1, alias: "r", addAllPagesToCollections: false },
+  permalink: (data) => data.r.from,
+  eleventyExcludeFromCollections: true,
+  layout: false,
+}
+---
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Moved to {{ r.to }}</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="{{ r.to | abs }}">
+<meta http-equiv="refresh" content="0; url={{ r.to }}">
+</head>
+<body>
+<p>This page is now at <a href="{{ r.to }}">{{ r.to }}</a>.</p>
+</body>
+</html>

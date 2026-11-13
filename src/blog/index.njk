@@ -1,0 +1,42 @@
+---js
+{
+  layout: "base.njk",
+  section: "blog",
+  pagination: { data: "collections.posts", size: 10, alias: "posts", reverse: true },
+  permalink: (data) => (data.pagination.pageNumber === 0 ? "/blog/" : `/blog/page/${data.pagination.pageNumber + 1}/`),
+  eleventyComputed: {
+    title: (data) => (data.pagination.pageNumber === 0 ? "Blog — turborel" : `Blog, page ${data.pagination.pageNumber + 1} — turborel`),
+    description: () => "Releases, design notes and the reasoning behind them, from the people building turborel.",
+    crumbs: (data) => [{ label: "turborel blog", url: data.pagination.pageNumber ? "/blog/" : null }, { label: "All posts" }],
+    related: () => [{ label: "tags", url: "/blog/tags/" }, { label: "atom feed", url: "/blog/feed.xml" }],
+    prevUrl: (data) => data.pagination.href.previous,
+    nextUrl: (data) => data.pagination.href.next,
+  },
+}
+---
+<div class="wrap layout">
+  {% include "blog-sidebar.njk" %}
+  <main id="content" class="sheet">
+    <h1 class="page-title">The turborel blog</h1>
+    <p class="lede">Releases, design notes and the reasoning behind them.</p>
+    {% set lastYear = null %}
+    {% for post in posts %}
+    {% set y = post.date | year %}
+    <article class="post-summary"{% if y != lastYear %} id="y{{ y }}"{% endif %}>
+      {% set lastYear = y %}
+      {% if post.data.coverSrc %}<a class="summary-cover" href="{{ post.url }}" tabindex="-1" aria-hidden="true"><img src="{{ post.data.coverSrc }}" alt="" width="1200" height="630" loading="lazy"></a>{% endif %}
+      <p class="kicker"><time datetime="{{ post.date | isoDate }}">{{ post.date | longDate }}</time>{% for t in post.data.tags | postTags %} · {{ t }}{% endfor %}</p>
+      <h2><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
+      <p class="summary-by">By {{ post.data.postAuthors | authorLinks | safe }}</p>
+      {% if post.data.description %}<p>{{ post.data.description }}</p>{% endif %}
+      <p class="more"><a href="{{ post.url }}" aria-label="Continue reading: {{ post.data.title }}">Continue reading »</a></p>
+    </article>
+    {% else %}
+    <p>No posts yet.</p>
+    {% endfor %}
+    <nav class="pager" aria-label="Pagination">
+      {% if pagination.href.previous %}<a class="pager-prev" href="{{ pagination.href.previous }}" rel="prev"><span>Newer</span>« Newer posts</a>{% else %}<span class="muted">Page {{ pagination.pageNumber + 1 }} of {{ pagination.pages.length or 1 }}</span>{% endif %}
+      {% if pagination.href.next %}<a class="pager-next" href="{{ pagination.href.next }}" rel="next"><span>Older</span>Older posts »</a>{% endif %}
+    </nav>
+  </main>
+</div>

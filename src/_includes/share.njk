@@ -1,0 +1,37 @@
+{#- Share buttons for a blog post: plain links, so no other site's scripts
+    load. "Share…" (the phone's own share sheet) and "Copy link" need
+    JavaScript and appear only when the browser supports them. -#}
+{%- set shareUrl = page.url | abs %}
+<section class="share" aria-labelledby="share-title" data-pagefind-ignore>
+  <h2 id="share-title">Share this post</h2>
+  <ul>
+    <li hidden><button type="button" data-share-native title="Share with an app on this device">{{ "share" | icon | safe }}<span>Share…</span></button></li>
+    {%- for s in shareUrl | shareTargets(title, description) %}
+    <li><a href="{{ s.href }}"{% if s.key != "email" %} target="_blank" rel="noopener"{% endif %} title="{{ 'Share by email' if s.key == 'email' else 'Share on ' + s.label }}">{{ s.key | icon | safe }}<span>{{ s.label }}</span></a></li>
+    {%- endfor %}
+    <li hidden><button type="button" data-copy="{{ shareUrl }}" title="Copy the link to this post">{{ "link" | icon | safe }}<span>Copy link</span></button></li>
+  </ul>
+</section>
+<script>
+(function () {
+  var box = document.currentScript.previousElementSibling;
+  var native = box.querySelector("[data-share-native]");
+  var copy = box.querySelector("[data-copy]");
+  if (navigator.share) {
+    native.parentNode.hidden = false;
+    native.addEventListener("click", function () {
+      navigator.share({ title: document.title, url: copy.getAttribute("data-copy") }).catch(function () {});
+    });
+  }
+  if (navigator.clipboard && window.isSecureContext) {
+    copy.parentNode.hidden = false;
+    var label = copy.querySelector("span");
+    copy.addEventListener("click", function () {
+      navigator.clipboard.writeText(copy.getAttribute("data-copy")).then(function () {
+        label.textContent = "Link copied";
+        setTimeout(function () { label.textContent = "Copy link"; }, 2000);
+      });
+    });
+  }
+})();
+</script>

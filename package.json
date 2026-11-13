@@ -1,0 +1,27 @@
+{
+  "name": "turborel-site",
+  "private": true,
+  "description": "turborel home page, versioned documentation and blog",
+  "type": "module",
+  "scripts": {
+    "fetch-docs": "node scripts/fetch-docs.js",
+    "build:site": "eleventy",
+    "build:search": "pagefind --site _site",
+    "build": "npm run fetch-docs && npm run build:site && npm run build:search",
+    "start": "eleventy --serve",
+    "dev": "npm run fetch-docs && npm run build:site && npm run build:search && eleventy --serve --incremental"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.8",
+    "@11ty/eleventy-plugin-rss": "^2.0.4",
+    "github-slugger": "^2.0.0",
+    "markdown-it": "^14.3.3",
+    "markdown-it-anchor": "^9.2.1",
+    "pagefind": "^1.6.0",
+    "prismjs": "^1.30.0",
+    "simple-icons": "16.36.0"
+  }
+}

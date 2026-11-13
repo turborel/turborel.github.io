@@ -1,0 +1,40 @@
+<aside class="sidebar">
+  {% if postToc and postToc.length %}
+  <nav class="sb-block" aria-labelledby="post-toc">
+    <h2 class="sb-title" id="post-toc">This post</h2>
+    <ul class="toc">
+    {%- for h in postToc %}<li class="toc-{{ h.level }}"><a href="#{{ h.id }}">{{ h.title }}</a></li>{% endfor %}
+    </ul>
+  </nav>
+  {% else %}
+  <div class="sb-block">
+    <h2 class="sb-title">About</h2>
+    <p>Writings from those building Turborel.</p>
+  </div>
+  {% endif %}
+
+  {% set years = collections.posts | byYear %}
+  {% if years.length %}
+  <nav class="sb-block" aria-labelledby="sb-archives">
+    <h2 class="sb-title" id="sb-archives">Archives</h2>
+    <ul>
+    {%- for y in years %}<li><a href="/blog/#y{{ y.year }}">{{ y.year }}</a> ({{ y.count }})</li>{% endfor %}
+    </ul>
+  </nav>
+  {% endif %}
+
+  {% if collections.blogTags.length %}
+  <nav class="sb-block" aria-labelledby="sb-tags">
+    <h2 class="sb-title" id="sb-tags">Tags</h2>
+    <p class="tag-cloud">{% for t in collections.blogTags %}<a href="/blog/tags/{{ t | tagSlug }}/">{{ t }}</a> {% endfor %}</p>
+  </nav>
+  {% endif %}
+
+  <div class="sb-block">
+    <h2 class="sb-title">Subscribe</h2>
+    <ul>
+      <li><a href="/blog/feed.xml">Atom feed</a></li>
+      <li><a href="{{ site.newsletter }}">Newsletter</a></li>
+    </ul>
+  </div>
+</aside>

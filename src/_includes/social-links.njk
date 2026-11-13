@@ -1,0 +1,10 @@
+{#- The project's accounts (GitHub, then whichever of site.social are set),
+    as icons. Used in the footer of every page, the home page's included. -#}
+{%- set socials = site | socialLinks %}
+{%- if socials.length %}
+<ul class="social" aria-label="turborel elsewhere">
+  {%- for l in socials %}
+  <li><a href="{{ l.url }}" rel="me" title="{{ l.label }}" aria-label="turborel on {{ l.label }}">{{ l.key | icon(20) | safe }}</a></li>
+  {%- endfor %}
+</ul>
+{%- endif %}

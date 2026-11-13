@@ -1,0 +1,52 @@
+---
+permalink: /blog/feed.xml
+eleventyExcludeFromCollections: true
+eleventyImport:
+  collections: ["posts"]
+feedTitle: The Turborel blog
+feedSubtitle: Releases, design notes and the reasoning behind them.
+feedLimit: 20
+---
+{%- set base = site.url + "/" -%}
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xml:lang="en">
+  <title>{{ feedTitle }}</title>
+  <subtitle>{{ feedSubtitle }}</subtitle>
+  <link href="{{ permalink | htmlBaseUrl(base) }}" rel="self" />
+  <link href="{{ base }}" />
+  <updated>{{ collections.posts | getNewestCollectionItemDate | dateToRfc3339 }}</updated>
+  <id>{{ base }}</id>
+  <author>
+    <name>{{ site.author }}</name>
+  </author>
+  {%- for post in collections.posts | reverse %}{% if loop.index <= feedLimit %}
+  {%- set absolutePostUrl %}{{ post.url | htmlBaseUrl(base) }}{% endset %}
+  <entry>
+    <title>{{ post.data.title }}</title>
+    <link href="{{ absolutePostUrl }}" />
+    <updated>{{ post.date | dateToRfc3339 }}</updated>
+    <id>{{ absolutePostUrl }}</id>
+    {%- for a in post.data.postAuthors %}
+    <author>
+      <name>{{ a.name }}</name>
+      {%- if a.url %}
+      <uri>{{ a.url }}</uri>
+      {%- endif %}
+    </author>
+    {%- endfor %}
+    {%- if post.data.description %}
+    <summary>{{ post.data.description }}</summary>
+    {%- endif %}
+    {%- if post.data.coverSrc %}
+    <media:thumbnail url="{{ post.data.coverSrc | htmlBaseUrl(base) }}" />
+    {%- if post.data.coverCreditInfo %}
+    <media:credit>{{ post.data.coverCreditInfo.text }}</media:credit>
+    {%- endif %}
+    {%- endif %}
+    {%- for f in post.data.postAttachments %}
+    <link rel="enclosure" href="{{ f.url | htmlBaseUrl(base) }}" title="{{ f.title }}"{% if f.type %} type="{{ f.type }}"{% endif %}{% if f.size != null %} length="{{ f.size }}"{% endif %} />
+    {%- endfor %}
+    <content type="html">{{ post.content | renderTransforms(post.data.page, base) }}</content>
+  </entry>
+  {%- endif %}{% endfor %}
+</feed>

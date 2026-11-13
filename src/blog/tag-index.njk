@@ -1,0 +1,17 @@
+---
+layout: base.njk
+section: blog
+permalink: /blog/tags/
+title: Tags — turborel blog
+description: Every tag on the turborel blog.
+crumbs: [{ label: "turborel blog", url: "/blog/" }, { label: "Tags" }]
+---
+<div class="wrap layout">
+  {% include "blog-sidebar.njk" %}
+  <main id="content" class="sheet">
+    <h1 class="page-title">Tags</h1>
+    <ul class="tag-list">
+    {% for t in collections.blogTags %}<li><a href="/blog/tags/{{ t | tagSlug }}/">{{ t }}</a> ({{ collections[t].length }})</li>{% else %}<li>No tags yet.</li>{% endfor %}
+    </ul>
+  </main>
+</div>

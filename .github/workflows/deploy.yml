@@ -1,0 +1,64 @@
+# Builds turborel.com (home, versioned docs, blog) and publishes it to
+# GitHub Pages. Runs on a push here, when turborel/turborel signals a docs
+# change or a release (see extras/turborel-repo), nightly, and by hand.
+name: Deploy site
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [docs-updated]
+  schedule:
+    - cron: "17 6 * * *" # nightly, in case a signal was missed
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Cache the turborel clone
+        uses: actions/cache@v4
+        with:
+          path: .cache/repo
+          key: turborel-repo-${{ github.run_id }}
+          restore-keys: turborel-repo-
+
+      - run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # reads turborel/turborel's releases
+          DOCS_STRICT_LINKS: "0" # "1" fails the deploy on a link to a missing page
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

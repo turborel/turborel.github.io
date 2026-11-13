@@ -1,0 +1,29 @@
+---js
+{
+  layout: "base.njk",
+  section: "blog",
+  pagination: { data: "collections.blogTags", size: 1, alias: "tag" },
+  permalink: (data) => `/blog/tags/${data.tag.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/`,
+  eleventyComputed: {
+    title: (data) => `Posts tagged “${data.tag}” — turborel blog`,
+    description: (data) => `Posts on the turborel blog tagged ${data.tag}.`,
+    crumbs: (data) => [{ label: "turborel blog", url: "/blog/" }, { label: "Tags", url: "/blog/tags/" }, { label: data.tag }],
+    related: () => [{ label: "all posts", url: "/blog/" }, { label: "atom feed", url: "/blog/feed.xml" }],
+  },
+}
+---
+<div class="wrap layout">
+  {% include "blog-sidebar.njk" %}
+  <main id="content" class="sheet">
+    <h1 class="page-title">Posts tagged “{{ tag }}”</h1>
+    {% for post in collections[tag] | reverse %}{% if post.url %}
+    <article class="post-summary">
+      {% if post.data.coverSrc %}<a class="summary-cover" href="{{ post.url }}" tabindex="-1" aria-hidden="true"><img src="{{ post.data.coverSrc }}" alt="" width="1200" height="630" loading="lazy"></a>{% endif %}
+      <p class="kicker"><time datetime="{{ post.date | isoDate }}">{{ post.date | longDate }}</time></p>
+      <h2><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
+      <p class="summary-by">By {{ post.data.postAuthors | authorLinks | safe }}</p>
+      {% if post.data.description %}<p>{{ post.data.description }}</p>{% endif %}
+    </article>
+    {% endif %}{% endfor %}
+  </main>
+</div>
