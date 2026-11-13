@@ -1,25 +1,39 @@
 {#- Runs first thing in <head>: marks JavaScript as on, and picks the theme
     before anything is drawn (no flash): the reader's choice if they made
     one, else the system's. With no choice saved it keeps following the
-    system as that changes. The dark styles are keyed on data-theme="dark". -#}
+    system as that changes. The dark styles are keyed on data-theme="dark".
+    color-scheme is set to match, or a phone in dark mode would keep its
+    dark defaults (white text) on a page switched to light. -#}
 <script>
 (function () {
-  var root = document.documentElement, key = "turborel-theme", saved = null;
+  var root = document.documentElement, key = "turborel-theme";
   root.classList.add("js");
-  try { saved = localStorage.getItem(key); } catch (e) {}
+  function saved() {
+    try { var s = localStorage.getItem(key); return s === "dark" || s === "light" ? s : null; } catch (e) { return null; }
+  }
   var system = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : null;
+  function preferred() { return saved() || (system && system.matches ? "dark" : "light"); }
   function apply(theme) {
     root.setAttribute("data-theme", theme);
+    root.style.colorScheme = theme;
     var metas = document.querySelectorAll('meta[name="theme-color"]');
     for (var i = 0; i < metas.length; i++) metas[i].setAttribute("content", theme === "dark" ? "#120D0E" : "#5C282B");
+    var scheme = document.querySelector('meta[name="color-scheme"]');
+    if (scheme) scheme.setAttribute("content", theme);
   }
   window.turborelTheme = { key: key, apply: apply };
-  apply(saved === "dark" || saved === "light" ? saved : system && system.matches ? "dark" : "light");
-  if (system && system.addEventListener) system.addEventListener("change", function (e) {
-    var s = null;
-    try { s = localStorage.getItem(key); } catch (x) {}
-    if (!s) apply(e.matches ? "dark" : "light");
-  });
+  apply(preferred());
+  function follow() { apply(preferred()); }
+  if (system) {
+    if (system.addEventListener) system.addEventListener("change", follow);
+    else if (system.addListener) system.addListener(follow);
+  }
+  window.addEventListener("storage", function (e) { if (e.key === key) follow(); }); // another tab switched
+  window.addEventListener("pageshow", function (e) { if (e.persisted) follow(); });  // back / forward
   document.addEventListener("DOMContentLoaded", function () { apply(root.getAttribute("data-theme")); });
+  // .scrolled once the page has moved: the sticky header then shows a fine edge
+  function scrolled() { root.classList.toggle("scrolled", (window.scrollY || 0) > 4); }
+  window.addEventListener("scroll", scrolled, { passive: true });
+  scrolled();
 })();
 </script>

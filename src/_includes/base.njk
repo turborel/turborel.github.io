@@ -59,7 +59,7 @@
   <div class="wrap">
     <nav aria-label="Breadcrumb"><ol>
       {%- for c in crumbs -%}
-      <li>{% if c.url %}<a href="{{ c.url }}">{{ c.label }}</a>{% else %}<span aria-current="page">{{ c.label }}</span>{% endif %}</li>
+      <li title="{{ c.label }}">{% if c.url %}<a href="{{ c.url }}">{{ c.label }}</a>{% else %}<span aria-current="page">{{ c.label }}</span>{% endif %}</li>
       {%- endfor -%}
     </ol></nav>
     {% if related %}<nav aria-label="Related" class="related">

@@ -27,7 +27,11 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; scrollbar-gutter: stable; } /* keep the layout from shifting between short and long pages; same rule in home.html */
+/* overflow-y: always room for a scrollbar, so the layout doesn't shift
+   between short and long pages, while the header and bands still reach the
+   edge (same in home.html). scroll-padding: links to a heading land below
+   the sticky header. */
+html { color-scheme: light; -webkit-text-size-adjust: 100%; overflow-y: scroll; scroll-padding-top: 84px; }
 
 body {
   margin: 0;
@@ -53,6 +57,27 @@ a:hover { color: var(--rust-dark); text-decoration: underline; }
 .muted { color: var(--muted); font-weight: 400; }
 
 /* ---- header ---------------------------------------------------------- */
+
+/* Sticky: stays at the top while the page scrolls (same in home.html). */
+.site-header {
+  position: sticky; top: 0; z-index: 30; background: inherit;
+  border-bottom: 1px solid transparent; transition: border-color 0.2s;
+}
+.scrolled .site-header { border-bottom-color: rgba(20, 6, 8, 0.28); } /* a fine dark edge once the page scrolls under it */
+:where(:root[data-theme="dark"]).scrolled .site-header { border-bottom-color: rgba(0, 0, 0, 0.6); }
+/* Frosted: the page shows through, blurred, as it scrolls under the header. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header {
+    background: rgba(92, 40, 43, 0.88);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    backdrop-filter: blur(24px) saturate(140%);
+  }
+  :where(:root[data-theme="dark"]) .site-header {
+    background: rgba(18, 13, 14, 0.76);
+    -webkit-backdrop-filter: blur(14px) saturate(150%);
+    backdrop-filter: blur(14px) saturate(150%);
+  }
+}
 
 .site-header .wrap {
   display: flex; flex-wrap: wrap; align-items: center;
@@ -100,10 +125,16 @@ a:hover { color: var(--rust-dark); text-decoration: underline; }
 /* ---- related bar ------------------------------------------------------ */
 
 .relbar { background: var(--maroon-deep); color: #E9D6CC; font-size: 13.5px; line-height: 1.5; }
-.relbar .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding-top: 9px; padding-bottom: 9px; }
+.relbar .wrap { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-top: 9px; padding-bottom: 9px; }
+/* One line at any width: a long path shortens with "…" (the page's own name
+   first) so the links on the right never drop to a line of their own. */
+.relbar nav[aria-label="Breadcrumb"] { flex: 1 1 auto; min-width: 0; }
+.relbar .related { flex: none; white-space: nowrap; }
 .relbar a { color: #F1DDD2; }
 .relbar a:hover { color: #fff; }
-.relbar ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; }
+.relbar ol { list-style: none; margin: 0; padding: 0; display: flex; white-space: nowrap; }
+.relbar li { flex: 0 1 auto; min-width: 2.6em; overflow: hidden; text-overflow: ellipsis; }
+.relbar li:last-child { flex-shrink: 40; }
 .relbar li + li::before { content: "»"; margin: 0 0.45em; color: #C9A99B; }
 .relbar .off { color: #A98C80; }
 
@@ -380,6 +411,21 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
   :where(:root[data-theme="dark"]) .token.inserted { color: #8FCB8F; }
 
   :where(:root[data-theme="dark"]) #search { --pagefind-ui-background: #1C1617; --pagefind-ui-tag: #2C2324; }
+}
+
+/* Wide screens: the sidebar stays in view while the page scrolls, and
+   scrolls on its own when it's taller than the window. */
+@media (min-width: 861px) {
+  .sidebar {
+    position: sticky; top: 84px; max-height: calc(100vh - 100px);
+    overflow-y: auto; overscroll-behavior: contain;
+    /* The gap to the page lives inside the sidebar (padding, then a negative
+       margin of the layout's 28px gap), so its scrollbar sits right against
+       the page. Wider to match, so the links keep their width. */
+    flex-basis: 250px; max-width: 300px;
+    padding: 2px 20px 12px 2px; margin: -2px -28px 0 -2px;
+    scrollbar-width: thin; scrollbar-color: rgba(241, 221, 210, 0.3) transparent;
+  }
 }
 
 /* ---- small screens ---------------------------------------------------- */

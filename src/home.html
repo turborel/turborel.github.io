@@ -42,7 +42,9 @@ eleventyExcludeFromCollections: true
         }
 
         html {
-            scrollbar-gutter: stable; /* same as site.css, so the header doesn't shift on long docs pages */
+            color-scheme: light; /* dark: see the data-theme block at the end */
+            overflow-y: scroll; /* same as site.css: no shift between pages, bands reach the edge */
+            scroll-padding-top: 76px; /* links to a spot on the page land below the sticky header */ /* same as site.css, so the header doesn't shift on long docs pages */
         }
 
         a {
@@ -69,8 +71,9 @@ eleventyExcludeFromCollections: true
 
         header {
             color: white;
-            position: relative;
-            z-index: 1; /* keep the nav above the terminal image's negative margin */
+            position: sticky; /* stays at the top while the page scrolls; same as site.css */
+            top: 0;
+            z-index: 30; /* also keeps the nav above the terminal image's negative margin */
         }
 
         .hero {
@@ -100,15 +103,34 @@ eleventyExcludeFromCollections: true
             min-width: 0;
         }
 
-      .header {
-            margin-top: 10px;
+      /* The header's band runs the full width of the window (the margins
+         pull it out to the edges, the padding keeps its contents in line)
+         and is frosted: the page shows through, blurred, as it scrolls
+         under. Same as site.css. */
+        .header {
             display: flex;
             align-items: center;      /* vertically centers img and h1 */
             gap: 12px;                /* space between mascot and text */
             min-height: 28px;
             flex-wrap: wrap;
-            width: 100%;
+            margin: 0 calc(50% - 50vw) -2px;
+            padding: 10px calc(50vw - 50%) 12px;
+            background: #5C282B;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
             font-family: "EB Garamond", serif;
+        }
+
+        .scrolled .header {
+            border-bottom-color: rgba(20, 6, 8, 0.28); /* a fine dark edge once the page scrolls under it; same as site.css */
+        }
+
+        @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+            .header {
+                background: rgba(92, 40, 43, 0.88);
+                -webkit-backdrop-filter: blur(24px) saturate(140%);
+                backdrop-filter: blur(24px) saturate(140%);
+            }
         }
 
         .header img {
@@ -575,6 +597,16 @@ eleventyExcludeFromCollections: true
         @media screen {
             :root[data-theme="dark"] {
                 color-scheme: dark;
+            }
+
+            :where(:root[data-theme="dark"]).scrolled .header {
+                border-bottom-color: rgba(0, 0, 0, 0.6);
+            }
+
+            :where(:root[data-theme="dark"]) .header {
+                background: rgba(18, 13, 14, 0.76);
+                -webkit-backdrop-filter: blur(14px) saturate(150%);
+                backdrop-filter: blur(14px) saturate(150%);
             }
 
             :where(:root[data-theme="dark"]) body {
