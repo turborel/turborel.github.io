@@ -1,7 +1,8 @@
 {#- The phone menu: a button that shows and hides #site-nav on small screens
-    (CSS in site.css and home.html, under "menu"). Without JavaScript the
-    button never appears and the links stay visible. -#}
-<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span class="bars" aria-hidden="true"></span></button>
+    (CSS in site.css and home.html, under "menu"). It starts `hidden`, so it
+    stays out of sight unless that CSS shows it (small screens, with
+    JavaScript); otherwise the links simply stay visible. -#}
+<button class="menu-toggle" type="button" hidden aria-expanded="false" aria-controls="site-nav" aria-label="Menu"><span class="bars" aria-hidden="true"></span></button>
 <script>
 (function () {
   // The nav comes after this script, so it's looked up when needed.

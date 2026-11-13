@@ -1,5 +1,7 @@
 import { HtmlBasePlugin } from "@11ty/eleventy";
 import rssPlugin from "@11ty/eleventy-plugin-rss";
+import crypto from "node:crypto";
+import fs from "node:fs";
 import { createMarkdown } from "./lib/markdown.js";
 import { icon, shareTargets, socialLinks } from "./lib/icons.js";
 import site from "./src/_data/site.js";
@@ -50,6 +52,17 @@ export default function (eleventyConfig) {
       return `<a ${a} target="_blank">`;
     })
   );
+  // "/assets/css/site.css" -> "/assets/css/site.css?v=1a2b3c4d": a new
+  // address whenever the file changes, so browsers never pair new pages
+  // with a stylesheet cached from an older deploy.
+  eleventyConfig.addFilter("versioned", (url) => {
+    try {
+      const hash = crypto.createHash("sha256").update(fs.readFileSync(`src${url}`)).digest("hex").slice(0, 10);
+      return `${url}?v=${hash}`;
+    } catch {
+      return url;
+    }
+  });
   eleventyConfig.addFilter("icon", icon); // {{ "x" | icon | safe }}
   eleventyConfig.addFilter("shareTargets", shareTargets);
   eleventyConfig.addFilter("socialLinks", socialLinks);
