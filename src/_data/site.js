@@ -14,7 +14,7 @@ export default {
     mastodon: "", // https://…/@… (linked with rel="me", for verification)
     linkedin: "https://www.linkedin.com/company/turborel",
     reddit: "https://www.reddit.com/r/turborel",
-    discord: "", // https://discord.gg/…
+    discord: "https://discord.gg/Fkf3ST2YPP",
     youtube: "https://www.youtube.com/@turborel",
     threads: "",
     instagram: "",
