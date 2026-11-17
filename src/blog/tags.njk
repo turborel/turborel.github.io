@@ -5,7 +5,7 @@
   pagination: { data: "collections.blogTags", size: 1, alias: "tag" },
   permalink: (data) => `/blog/tags/${data.tag.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "")}/`,
   eleventyComputed: {
-    title: (data) => `Posts tagged “${data.tag}” — turborel blog`,
+    title: (data) => `Posts tagged “${data.tag}” — Turborel blog`,
     description: (data) => `Posts on the turborel blog tagged ${data.tag}.`,
     crumbs: (data) => [{ label: "turborel blog", url: "/blog/" }, { label: "Tags", url: "/blog/tags/" }, { label: data.tag }],
     related: () => [{ label: "all posts", url: "/blog/" }, { label: "atom feed", url: "/blog/feed.xml" }],

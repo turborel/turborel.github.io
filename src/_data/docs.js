@@ -190,7 +190,7 @@ function load() {
         const html = md.renderer.render(tokens, md.options, env);
 
         // Breadcrumbs: the set's contents, then each enclosing volume.
-        const crumbs = [{ label: `turborel ${v.title} documentation`, url: target }];
+        const crumbs = [{ label: `Turborel ${v.title} documentation`, url: target }];
         const parts = dir ? dir.split("/") : [];
         for (let n = 1; n <= parts.length; n++) {
           const d = parts.slice(0, n).join("/");
@@ -243,7 +243,7 @@ function load() {
           indexable: isCanonicalTree,
           noindex: v.kind === "dev",
           title: titleOf.get(p.rel),
-          description: description || `${titleOf.get(p.rel)}: turborel ${v.label} documentation.`,
+          description: description || `${titleOf.get(p.rel)}: Turborel ${v.label} documentation.`,
           html,
           toc,
           crumbs,

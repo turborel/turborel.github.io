@@ -7,8 +7,8 @@
   eleventyComputed: {
     title: (data) =>
       data.doc.crumbs.length === 1
-        ? `turborel ${data.doc.version.title} documentation`
-        : `${data.doc.title} — turborel ${data.doc.version.title} documentation`,
+        ? `Turborel ${data.doc.version.title} documentation`
+        : `${data.doc.title} — Turborel ${data.doc.version.title} documentation`,
     description: (data) => data.doc.description,
     canonical: (data) => data.doc.canonical,
     noindex: (data) => data.doc.noindex,

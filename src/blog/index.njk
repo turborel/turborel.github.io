@@ -5,7 +5,7 @@
   pagination: { data: "collections.posts", size: 10, alias: "posts", reverse: true },
   permalink: (data) => (data.pagination.pageNumber === 0 ? "/blog/" : `/blog/page/${data.pagination.pageNumber + 1}/`),
   eleventyComputed: {
-    title: (data) => (data.pagination.pageNumber === 0 ? "Blog — turborel" : `Blog, page ${data.pagination.pageNumber + 1} — turborel`),
+    title: (data) => (data.pagination.pageNumber === 0 ? "Blog — Turborel" : `Blog, page ${data.pagination.pageNumber + 1} — Turborel`),
     description: () => "Releases, design notes and the reasoning behind them, from the people building turborel.",
     crumbs: (data) => [{ label: "turborel blog", url: data.pagination.pageNumber ? "/blog/" : null }, { label: "All posts" }],
     related: () => [{ label: "tags", url: "/blog/tags/" }, { label: "atom feed", url: "/blog/feed.xml" }],

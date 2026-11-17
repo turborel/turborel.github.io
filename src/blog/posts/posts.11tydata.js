@@ -165,7 +165,7 @@ export default {
   layout: "post.njk",
   eleventyComputed: {
     permalink: (data) => (isProd && data.draft ? false : `/blog/${data.page.fileSlug}/`),
-    metaTitle: (data) => `${data.title} — turborel blog`,
+    metaTitle: (data) => `${data.title} — Turborel blog`,
     postAuthors,
     coverSrc: (data) => coverSrc(data.cover),
     ogImage: (data) => coverSrc(data.cover),
