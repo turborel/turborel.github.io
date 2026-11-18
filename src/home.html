@@ -508,6 +508,15 @@ eleventyExcludeFromCollections: true
             color: #FFFFFF;
         }
 
+        .cover .subline {
+            margin: 18px 0 0;
+            font-family: "EB Garamond", serif;
+            font-style: italic;
+            font-size: clamp(20px, 2.2vw, 24px);
+            line-height: 1.35;
+            color: #F1DDD2;
+        }
+
         .cover .tagline em {
             font-style: italic;
             color: #F4B08A;
@@ -721,7 +730,7 @@ eleventyExcludeFromCollections: true
             /* the still life goes under the tagline; its outermost pieces drop out */
             .cover {
                 grid-template-columns: minmax(0, 1fr);
-                gap: 8px;
+                gap: 44px; /* the half-circle rises above the drawing's box */
                 padding: 24px 0 32px;
             }
 
@@ -886,7 +895,10 @@ eleventyExcludeFromCollections: true
     <div class="container">
         <main>
             <section class="cover">
-                <h2 class="tagline">Built for What You&rsquo;re Building <em>Next</em></h2>
+                <div class="cover-text">
+                    <h2 class="tagline">Relational Is <em>Back</em>, and It Brought Everything You Need to Build</h2>
+                    <p class="subline">Tables, graphs, vectors, JSON and search, in one database.</p>
+                </div>
 
                 {#- The still life: a database cylinder among 1980s Memphis-style
                     shapes. data-depth: how fast a shape rises against the scroll;
