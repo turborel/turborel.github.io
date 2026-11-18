@@ -76,7 +76,7 @@
   {%- if page.url and page.url.startsWith("/docs/") %}
   <p>© Copyright {{ site.year }}, {{ site.author }}. Licensed under the <a href="{{ site.github }}/blob/main/LICENSE">BSD 2-Clause License</a>.</p>
   {%- else %}
-  <p>© {{ site.year }} Turborel</p>
+  <p>© {{ site.year }} {{ site.company }}</p>
   {%- endif %}
   {% if footerNote %}<p>{{ footerNote | safe }}</p>{% endif %}
 </footer>
