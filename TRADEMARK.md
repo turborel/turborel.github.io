@@ -1,7 +1,7 @@
 # Trademark Policy
 
-turborel's source code is licensed under the BSD 2-Clause License (see
-LICENSE). That license covers the code only. It grants no right to use
+turborel's source code is licensed under the BSD-2-Clause Plus Patent
+License (see LICENSE). That license covers the code only. It grants no right to use
 the name "turborel", its logos, or its other branding (together, "the
 marks"), which this policy governs.
 
