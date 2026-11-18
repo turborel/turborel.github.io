@@ -29,8 +29,8 @@ export default {
   },
   analytics: "G-XDW3XF90B8", // Google Analytics, as on the home page; "" to drop it
   author: "Turborel contributors",
-  // Holds the name, logos and other marks, and the site's copyright. The
-  // source code stays "Turborel contributors", under the BSD 2-Clause License.
+  // The copyright holder (as in the turborel repo's LICENSE) and owner of
+  // the name and logos; shown in every page's footer.
   company: "Turborel Inc.",
   homePosts: 3, // newest blog posts listed on the home page
   homeReleases: 5, // newest releases listed on the home page
