@@ -1,0 +1,66 @@
+---
+layout: base.njk
+permalink: /ecosystem/
+title: Ecosystem — Turborel
+description: Use Turborel from Rust, where it's built in, or from JavaScript, Python, Go, Java, C#, C++, C, PHP and Ruby with the official ecosystem. Plus the CLI, Studio, Helm charts and drivers from the community.
+crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
+---
+{#- Everything here comes from src/_data/ecosystem.js; community entries are
+    added there by pull request. #}
+{%- set latest = releases[0] %}
+<div class="wrap layout single">
+  <main id="content" class="sheet">
+    <article class="doc ecosystem">
+      <h1 class="page-title">Ecosystem</h1>
+      <p class="lede">Drivers for your language, the tools that come with Turborel, ways to run it on Kubernetes, and projects from the community.</p>
+
+      <h2>Built in</h2>
+      <p><strong>{{ ecosystem.builtin.language }}.</strong> Turborel is written in Rust, and its Rust library ships with the server and the CLI in <a href="{{ ecosystem.builtin.url }}"><code>{{ ecosystem.builtin.repo }}</code></a>. Embed the database in your application, or connect to a <code>turboreld</code> server.</p>
+
+      <h2>Official drivers</h2>
+      <p>Maintained by the Turborel project, and released together with the server: a driver&rsquo;s version is the server version it was built for.{% if not latest %} There are no releases yet, so every driver follows its repo&rsquo;s main branch, alongside the server&rsquo;s.{% endif %}</p>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Language</th><th>Repository</th><th>Version</th></tr></thead>
+        <tbody>
+          {%- for d in ecosystem.official %}
+          <tr><td>{{ d.language }}</td><td><a href="{{ d.url }}"><code>{{ d.repo }}</code></a></td><td>{% if latest %}{{ latest.version }}{% else %}alpha{% endif %}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table></div>
+
+      <h2>Tools</h2>
+      <div class="table-wrap"><table>
+        <tbody>
+          {%- for t in ecosystem.tools %}
+          <tr><td><strong>{{ t.name }}</strong></td><td>{{ t.description }}</td><td><a href="{{ t.url }}"><code>{{ t.repo }}</code></a></td></tr>
+          {%- endfor %}
+        </tbody>
+      </table></div>
+
+      <h2>Kubernetes</h2>
+      <div class="table-wrap"><table>
+        <tbody>
+          {%- for k in ecosystem.kubernetes %}
+          <tr><td><strong><a href="{{ k.url }}">{{ k.name }}</a></strong></td><td>{{ k.description }}{% if k.install %}<br><code>{{ k.install }}</code>{% endif %}</td><td><a href="https://github.com/{{ k.repo }}"><code>{{ k.repo }}</code></a></td></tr>
+          {%- endfor %}
+        </tbody>
+      </table></div>
+
+      <h2>From the community</h2>
+      {%- if ecosystem.community.length %}
+      <div class="table-wrap"><table>
+        <thead><tr><th>Language</th><th>Project</th><th>About</th></tr></thead>
+        <tbody>
+          {%- for c in ecosystem.community %}
+          <tr><td>{{ c.language }}</td><td><a href="{{ c.url }}">{{ c.name }}</a>{% if c.by %} by {{ c.by }}{% endif %}</td><td>{{ c.description }}</td></tr>
+          {%- endfor %}
+        </tbody>
+      </table></div>
+      <p>Community projects are listed as their authors describe them; the Turborel project doesn&rsquo;t maintain or review them.</p>
+      {%- else %}
+      <p class="none">None yet.</p>
+      {%- endif %}
+      <p>Wrote a driver or a tool? Add it to <a href="https://github.com/turborel/turborel.github.io/blob/main/src/_data/ecosystem.js"><code>src/_data/ecosystem.js</code></a> in the website&rsquo;s repository and open a pull request.</p>
+    </article>
+  </main>
+</div>

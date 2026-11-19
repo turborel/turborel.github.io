@@ -468,3 +468,8 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
   .site-header, .relbar, .sidebar, .pager, .site-footer, .headerlink { display: none; }
   .sheet { box-shadow: none; padding: 0; }
 }
+
+/* ---- /ecosystem/ ----------------------------------------------------- */
+.ecosystem table { width: 100%; }
+.ecosystem td code { white-space: nowrap; }
+.ecosystem .none { color: var(--muted); font-style: italic; }

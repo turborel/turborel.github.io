@@ -35,7 +35,7 @@ eleventyExcludeFromCollections: true
       gtag('config', 'G-XDW3XF90B8');
     </script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Work+Sans:ital,wght@0,100..900;1,100..900&family=IBM+Plex+Mono:wght@400;600&display=swap');
         
         *, *::before, *::after {
             box-sizing: border-box;
@@ -59,7 +59,7 @@ eleventyExcludeFromCollections: true
             font-style: normal;
             margin: 0;
             background: #5C282B;
-            overflow-x: clip; /* the terminal's shadow can spill past the edge on phones */
+            overflow-x: clip; /* nothing drawn past the edge (the still life) scrolls sideways */
         }
 
         .container {
@@ -73,7 +73,7 @@ eleventyExcludeFromCollections: true
             color: white;
             position: sticky; /* stays at the top while the page scrolls; same as site.css */
             top: 0;
-            z-index: 30; /* also keeps the nav above the terminal image's negative margin */
+            z-index: 30;
         }
 
         .hero {
@@ -98,10 +98,9 @@ eleventyExcludeFromCollections: true
             margin-bottom: 0;
         }
 
-        /* ---- the introduction beside the terminal ---------------------- */
+        /* ---- the introduction under the cover ------------------------- */
         .entry {
-            flex: 0 0 360px;
-            align-self: center;
+            flex: 0 1 760px;
             color: #F1DDD2;
             font-family: "EB Garamond", serif;
         }
@@ -111,7 +110,7 @@ eleventyExcludeFromCollections: true
         }
 
         .entry .def {
-            font-size: 22px;
+            font-size: clamp(22px, 2.5vw, 27px);
             line-height: 1.4;
         }
 
@@ -133,6 +132,197 @@ eleventyExcludeFromCollections: true
         }
 
         /* ---- features: names as one line of type, one card ------------- */
+        /* ---- connect: the patch bay ------------------------------------- */
+        .connect {
+            margin: 0 0 56px;
+            color: #F1DDD2;
+        }
+
+        .connect h2 {
+            margin: 0 0 8px;
+            font-family: "EB Garamond", serif;
+            font-weight: 500;
+            font-size: clamp(34px, 4.4vw, 46px);
+            line-height: 1.05;
+            color: #FFFFFF;
+        }
+
+        .connect h2 em {
+            color: #F4B08A;
+        }
+
+        .connect .lede {
+            margin: 0 0 12px;
+            max-width: 60ch;
+            font-family: "EB Garamond", serif;
+            font-style: italic;
+            font-size: 20px;
+            line-height: 1.45;
+        }
+
+        .bay {
+            display: block;
+            width: 100%;
+            height: auto;
+            overflow: hidden;
+        }
+
+        .bay .ring {
+            fill: none;
+            stroke: #F1DDD2;
+            stroke-width: 2;
+            stroke-dasharray: 2 7;
+            stroke-linecap: round;
+            opacity: 0.7;
+        }
+
+        .bay .cable {
+            fill: none;
+            stroke-width: 3;
+            stroke-linecap: round;
+            opacity: 0.55;
+            transition: opacity 0.2s, stroke-width 0.2s;
+        }
+
+        .bay .cable.native {
+            stroke-width: 5;
+        }
+
+        .bay.hot .cable {
+            opacity: 0.18;
+        }
+
+        .bay.hot .cable.on {
+            opacity: 1;
+            stroke-width: 4.5;
+        }
+
+        .bay.hot .cable.native.on {
+            stroke-width: 6;
+        }
+
+        .bay .jack {
+            text-decoration: none;
+            outline: none;
+        }
+
+        .bay .socket {
+            fill: #45191C;
+            stroke: #F1DDD2;
+            stroke-width: 2;
+        }
+
+        .bay .lang,
+        .bay .tool {
+            font-family: "EB Garamond", serif;
+            font-size: 22px;
+            fill: #FFFFFF;
+        }
+
+        .bay .tool {
+            font-size: 24px;
+        }
+
+        .bay .sub {
+            font-family: "Work Sans", sans-serif;
+            font-size: 12px;
+            fill: #F1DDD2;
+        }
+
+        .bay .sub.mono {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 11px;
+            opacity: 0.75;
+        }
+
+        .bay .prompt {
+            font: 600 13px "IBM Plex Mono", ui-monospace, monospace;
+            fill: #F1DDD2;
+        }
+
+        .bay .jack:hover .lang,
+        .bay .jack:hover .tool,
+        .bay .jack:focus-visible .lang,
+        .bay .jack:focus-visible .tool {
+            fill: #F4B08A;
+            text-decoration: underline;
+        }
+
+        .bay .jack:focus-visible .socket,
+        .bay .jack:focus-visible .screen {
+            stroke: #F4B08A;
+            stroke-width: 3;
+        }
+
+        .bay .node {
+            transition: opacity 0.6s, transform 0.6s;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+
+        .bay .node.off {
+            opacity: 0;
+            transform: scale(0.6);
+        }
+
+        /* the tall layout replaces the wide one on narrower screens; it is
+           drawn larger, so its text stays readable when scaled down */
+        .bay.tall {
+            display: none;
+            max-width: 560px;
+            margin: 0 auto;
+        }
+
+        .bay.tall .lang,
+        .bay.tall .tool {
+            font-size: 30px;
+        }
+
+        .bay.tall .sub {
+            font-size: 16px;
+        }
+
+        .bay.tall .sub.mono {
+            font-size: 15px;
+        }
+
+        .bay .screen {
+            stroke: #F1DDD2;
+            stroke-width: 2.5;
+        }
+
+        .connect .more {
+            margin: 8px 0 0;
+            text-align: center;
+            font-size: 15px;
+        }
+
+        .connect .more a {
+            color: #F4B08A;
+            text-underline-offset: 3px;
+        }
+
+        @media (max-width: 900px) {
+            .bay.wide {
+                display: none;
+            }
+
+            .bay.tall {
+                display: block;
+            }
+
+            .connect .more {
+                margin-top: 18px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .bay .cable,
+            .bay .node {
+                transition: none;
+            }
+        }
+
         .features {
             margin: 8px 0 48px;
             color: #F1DDD2;
@@ -290,11 +480,6 @@ eleventyExcludeFromCollections: true
             }
         }
 
-        .image {
-            flex: 1 1 0;
-            min-width: 0;
-        }
-
       /* The header is its own full-width band, outside .container (as on
          the docs and blog: a sticky header inside .container, which clips
          sideways on phones, shook on iPhone). The side padding lines its
@@ -336,14 +521,6 @@ eleventyExcludeFromCollections: true
             margin: 0;                /* removes the default h1 margin that pushes it off-center */
             line-height: 1;
             font-size: 22px;
-        }
-
-        .image img {
-            display: block;
-            width: calc(100% * 780 / 700);
-            max-width: none;
-            height: auto;
-            margin: calc(-100% * 40 / 700);
         }
 
         .site-nav {
@@ -619,8 +796,7 @@ eleventyExcludeFromCollections: true
             }
         }
 
-        /* latest posts and releases, under the hero; the columns line up
-           with the intro card and the terminal above them */
+        /* latest posts and releases, under the features */
         .updates {
             display: grid;
             grid-template-columns: 340px minmax(0, 1fr);
@@ -725,7 +901,7 @@ eleventyExcludeFromCollections: true
 
         @media (max-width: 800px) {
             .container {
-                overflow-x: clip; /* the terminal's shadow is wider than the screen here */
+                overflow-x: clip; /* nothing drawn past the edge scrolls sideways */
             }
 
             .hero {
@@ -733,8 +909,7 @@ eleventyExcludeFromCollections: true
             }
 
             .box,
-            .entry,
-            .image {
+            .entry {
                 flex: none;
                 width: 100%;
             }
@@ -981,9 +1156,6 @@ eleventyExcludeFromCollections: true
                     <p class="def">Turborel (TUR-boh-rel) is a relational database written in <a target="_blank" href="https://rust-lang.org/">Rust</a>. It isn&rsquo;t a fork of another database. It&rsquo;s designed from first principles as one extensible system for modern applications.</p>
                     <p class="lic">Open source under the <a target="_blank" href="https://github.com/turborel/turborel/blob/main/LICENSE">BSD-2-Clause Plus Patent License</a>.</p>
                 </div>
-                <div class="image">
-                    <img src="assets/cli.png" alt="turborel command-line client running a SELECT query">
-                </div>
             </div>
 
             {#- Features (src/_data/features.js): the names run as one line of
@@ -1034,6 +1206,132 @@ eleventyExcludeFromCollections: true
                             if (j !== null) { e.preventDefault(); pick(tabs[j], true); }
                         });
                     });
+                })();
+                </script>
+            </section>
+
+            {#- Connect (src/_data/ecosystem.js, laid out by src/_data/patchbay.js):
+                Rust and the drivers wired to a ring of database nodes that
+                come and go (any number, no fixed roles), with a shape hopping
+                between them. Two layouts (src/_data/patchbay.js): wide, and a
+                tall one for phones and tablets. #}
+            <section class="connect" aria-labelledby="home-connect">
+                <h2 id="home-connect">Connect it to <em>your</em> stack</h2>
+                <p class="lede">Use it from Rust, where it&rsquo;s built in, or from {{ (["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve"])[ecosystem.official.length] or ecosystem.official.length }} other languages with official drivers released alongside the server.</p>
+                {%- for L in patchbay.layouts %}
+                <svg class="bay {{ 'tall' if L.tall else 'wide' }}" viewBox="{{ L.viewBox }}" role="group" aria-label="Rust, the official drivers, the CLI and Studio, wired to Turborel">
+                    <defs><pattern id="bay-dots-{{ loop.index }}" width="9" height="9" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.3" fill="#5C282B" opacity=".55"/></pattern></defs>
+                    <circle class="ring" cx="{{ L.cx }}" cy="{{ L.cy }}" r="{{ L.r }}"/>
+                    {%- for j in L.jacks %}
+                    <path class="cable{% if j.native %} native{% endif %}" data-i="{{ loop.index0 }}" stroke="{{ j.color }}" d="{{ j.cable }}"/>
+                    <circle cx="{{ j.end[0] }}" cy="{{ j.end[1] }}" r="4" fill="#F1DDD2"/>
+                    {%- endfor %}
+                    <path class="cable" data-i="studio" stroke="#FFFFFF" d="{{ L.studio.cable }}"/>
+                    <path class="cable" data-i="cli" stroke="#F4B08A" d="{{ L.cli.cable }}"/>
+                    {%- set pid = "bay-dots-" + loop.index %}
+                    <g class="nodes">
+                        {%- for s in L.slots %}
+                        <g class="node{% if loop.index0 not in patchbay.live %} off{% endif %}">{{ patchbay.cylinder(s[0], s[1], "#E58A5C" if loop.index0 % 2 else "#F4B08A", pid) | safe }}</g>
+                        {%- endfor %}
+                    </g>
+                    <a class="jack" href="{{ patchbay.cliUrl }}" data-i="cli">
+                        <g transform="translate({{ L.cli.x }} {{ L.cli.y }})">
+                            <rect class="screen" width="120" height="76" rx="9" fill="#2A1A1B"/>
+                            <circle cx="14" cy="13" r="3" fill="#E58A5C"/><circle cx="24" cy="13" r="3" fill="#F4B08A"/><circle cx="34" cy="13" r="3" fill="#F1DDD2"/>
+                            <text class="prompt" x="14" y="40">turborel&gt;</text><rect x="14" y="50" width="9" height="14" fill="#F4B08A"/>
+                        </g>
+                        <text class="tool" x="{{ L.cli.lx }}" y="{{ L.cli.ly }}" text-anchor="{{ L.cli.anchor }}">CLI</text><text class="sub" x="{{ L.cli.lx }}" y="{{ L.cli.ly + (26 if L.tall else 20) }}" text-anchor="{{ L.cli.anchor }}">Comes with the server</text>
+                    </a>
+                    <a class="jack" href="{{ patchbay.studioUrl }}" data-i="studio">
+                        <g transform="translate({{ L.studio.x }} {{ L.studio.y }})">
+                            <rect class="screen" width="120" height="76" rx="9" fill="#45191C"/>
+                            <rect x="12" y="11" width="96" height="46" rx="4" fill="#2A1A1B"/>
+                            <rect x="20" y="39" width="13" height="12" fill="#F4B08A"/><rect x="38" y="29" width="13" height="22" fill="#E58A5C"/><rect x="56" y="19" width="13" height="32" fill="#F1DDD2"/><circle cx="90" cy="35" r="11" fill="none" stroke="#F4B08A" stroke-width="4.5" stroke-dasharray="42 30"/>
+                        </g>
+                        <text class="tool" x="{{ L.studio.lx }}" y="{{ L.studio.ly }}" text-anchor="{{ L.studio.anchor }}">Studio</text><text class="sub" x="{{ L.studio.lx }}" y="{{ L.studio.ly + (26 if L.tall else 20) }}" text-anchor="{{ L.studio.anchor }}">Your databases, visualized</text>
+                    </a>
+                    {%- for j in L.jacks %}
+                    <a class="jack" href="{{ j.url }}" data-i="{{ loop.index0 }}">
+                        <circle class="socket" cx="{{ j.x }}" cy="{{ j.y }}" r="{{ L.sock }}"/>
+                        <circle cx="{{ j.x }}" cy="{{ j.y }}" r="{{ L.sock * 0.4 }}" fill="{{ j.color }}"/>
+                        <text class="lang" x="{{ j.tx }}" y="{{ j.ty }}" text-anchor="{{ j.anchor }}">{{ j.label }}</text>
+                        <text class="sub mono" x="{{ j.tx }}" y="{{ j.sy }}" text-anchor="{{ j.anchor }}">{{ j.sub }}</text>
+                    </a>
+                    {%- endfor %}
+                </svg>
+                {%- endfor %}
+                <p class="more"><a href="/ecosystem/">Drivers, tools and more &raquo;</a></p>
+                <script>
+                (function () {
+                    var bays = document.currentScript.parentNode.querySelectorAll(".bay");
+                    var NS = "http://www.w3.org/2000/svg";
+                    // hovering or focusing a connection lights its cable
+                    Array.prototype.forEach.call(bays, function (svg) {
+                        var cables = svg.querySelectorAll(".cable");
+                        function light(i) {
+                            svg.classList.toggle("hot", i !== null);
+                            for (var k = 0; k < cables.length; k++) cables[k].classList.toggle("on", cables[k].getAttribute("data-i") === i);
+                        }
+                        Array.prototype.forEach.call(svg.querySelectorAll(".jack"), function (a) {
+                            var i = a.getAttribute("data-i");
+                            a.addEventListener("mouseenter", function () { light(i); });
+                            a.addEventListener("focus", function () { light(i); });
+                            a.addEventListener("mouseleave", function () { light(null); });
+                            a.addEventListener("blur", function () { light(null); });
+                        });
+                    });
+                    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+                    // nodes come and go; a shape hops between whichever are there,
+                    // a different one each time
+                    var layouts = {{ patchbay.layouts | dump | safe }};
+                    var live = {{ patchbay.live | dump | safe }};
+                    var shapes = [
+                        '<rect x="-4.5" y="-4.5" width="9" height="9" fill="#F4B08A"/>',
+                        '<path d="M0,-6 L6,4.5 L-6,4.5Z" fill="#FFFFFF"/>',
+                        '<rect x="-4" y="-4" width="8" height="8" fill="#E58A5C" transform="rotate(45)"/>',
+                        '<path d="M-6,3 a6,6 0 0 1 12,0Z" fill="#F1DDD2"/>',
+                        '<circle r="4.5" fill="none" stroke="#F4B08A" stroke-width="2"/>',
+                        '<path d="M-5,4 L-1,-4 M1,4 L5,-4" stroke="#F1DDD2" stroke-width="2" stroke-linecap="round"/>',
+                        '<path d="M-6,0 q3,-5 6,0 t6,0" fill="none" stroke="#E58A5C" stroke-width="2" stroke-linecap="round"/>',
+                        '<circle r="4" fill="#E58A5C"/>'
+                    ];
+                    var s = 0;
+                    // the same nodes and hop in both layouts (only one is shown)
+                    var views = Array.prototype.map.call(bays, function (svg, n) {
+                        var hop = document.createElementNS(NS, "g");
+                        svg.querySelector(".nodes").appendChild(hop);
+                        return { hop: hop, nodes: svg.querySelectorAll(".node"), slots: layouts[n].slots };
+                    });
+                    var slotCount = views[0].slots.length;
+                    function next() { s = (s + 1 + Math.floor(Math.random() * 3)) % shapes.length; views.forEach(function (v) { v.hop.innerHTML = shapes[s]; }); }
+                    function show() { views.forEach(function (v) { for (var k = 0; k < v.nodes.length; k++) v.nodes[k].classList.toggle("off", live.indexOf(k) < 0); }); }
+                    var from = live[0], to = live[1], t0 = null;
+                    next();
+                    function frame(t) {
+                        if (t0 === null) t0 = t;
+                        var u = Math.min(1, (t - t0) / 1100);
+                        views.forEach(function (v) {
+                            var a = v.slots[from], b = v.slots[to];
+                            var x = a[0] + (b[0] - a[0]) * u, y = a[1] - 30 + (b[1] - a[1]) * u - Math.sin(Math.PI * u) * 34;
+                            v.hop.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ") rotate(" + (u * 200).toFixed(0) + ") scale(1.3)");
+                            v.hop.setAttribute("opacity", Math.min(1, Math.sin(Math.PI * u) * 3).toFixed(2));
+                        });
+                        if (u >= 1) {
+                            t0 = t;
+                            if (Math.random() < 0.5) {
+                                var n = 1 + Math.floor(Math.random() * (slotCount - 1)), at = live.indexOf(n);
+                                if (at >= 0) { if (live.length > 1) live.splice(at, 1); } else live.push(n);
+                                show();
+                            }
+                            from = live.indexOf(to) >= 0 ? to : live[0];
+                            var others = live.filter(function (k) { return k !== from; });
+                            to = others.length ? others[Math.floor(Math.random() * others.length)] : from;
+                            next();
+                        }
+                        requestAnimationFrame(frame);
+                    }
+                    requestAnimationFrame(frame);
                 })();
                 </script>
             </section>

@@ -1,0 +1,42 @@
+// Ways to connect to Turborel, for the home page's patch bay and /ecosystem/.
+//
+//   builtin    the Rust library, which ships with the server and the CLI
+//   official   drivers maintained by the Turborel project, one repo each,
+//              released together with the server: a driver's version is the
+//              server version it was built for
+//   tools      other official programs that connect to it
+//   kubernetes official ways to run it on Kubernetes
+//   community  drivers and tools written by others. Wrote one? Add it here
+//              and open a pull request:
+//                { language: "Elixir", name: "turborel_ex",
+//                  url: "https://github.com/someone/turborel_ex",
+//                  description: "An Elixir driver.", by: "someone" }
+const gh = (repo) => `https://github.com/turborel/${repo}`;
+
+export default {
+  builtin: { language: "Rust", repo: "turborel/turborel", url: gh("turborel") },
+
+  official: [
+    { language: "JavaScript", repo: "turborel/turborel-js", url: gh("turborel-js") },
+    { language: "Python", repo: "turborel/turborel-py", url: gh("turborel-py") },
+    { language: "Go", repo: "turborel/turborel-go", url: gh("turborel-go") },
+    { language: "Java", repo: "turborel/turborel-java", url: gh("turborel-java") },
+    { language: "C#", repo: "turborel/turborel-cs", url: gh("turborel-cs") },
+    { language: "C++", repo: "turborel/turborel-cpp", url: gh("turborel-cpp") },
+    { language: "C", repo: "turborel/turborel-c", url: gh("turborel-c") },
+    { language: "PHP", repo: "turborel/turborel-php", url: gh("turborel-php") },
+    { language: "Ruby", repo: "turborel/turborel-ruby", url: gh("turborel-ruby") },
+  ],
+
+  tools: [
+    { name: "CLI", repo: "turborel/turborel", url: gh("turborel"), description: "The command-line client, turborel. It comes with the server." },
+    { name: "Studio", repo: "turborel/studio", url: gh("studio"), description: "Your databases, visualized through a GUI." },
+  ],
+
+  kubernetes: [
+    { name: "Helm charts", repo: "turborel/charts", url: "https://charts.turborel.com/", description: "Runs turboreld as a StatefulSet, its database on a volume of its own.", install: "helm repo add turborel https://charts.turborel.com" },
+    { name: "Operator", repo: "turborel/turborel-operator", url: gh("turborel-operator"), description: "A Kubernetes operator for running Turborel." },
+  ],
+
+  community: [],
+};
