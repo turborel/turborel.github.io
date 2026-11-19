@@ -691,6 +691,27 @@ eleventyExcludeFromCollections: true
             vertical-align: middle;
         }
 
+        /* the nightly's downloads: one small outlined link per platform */
+        .feed .get {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .feed .get a {
+            padding: 2px 8px;
+            border: 1px solid #E6DCD5;
+            border-radius: 3px;
+            font-size: 13px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .feed .get a:hover {
+            border-color: currentColor;
+        }
+
         .updates .empty {
             margin: 14px 0 0;
             font-size: 15px;
@@ -819,8 +840,9 @@ eleventyExcludeFromCollections: true
                 color: #E9E0DB;
             }
 
-            :where(:root[data-theme="dark"]) .feed li {
-                border-bottom-color: #3A2E2F;
+            :where(:root[data-theme="dark"]) .feed li,
+            :where(:root[data-theme="dark"]) .feed .get a {
+                border-color: #3A2E2F;
             }
 
             :where(:root[data-theme="dark"]) .feed time,
@@ -1041,8 +1063,18 @@ eleventyExcludeFromCollections: true
                 <section class="box" aria-labelledby="home-releases">
                     <h2 id="home-releases">Releases</h2>
                     {%- set rels = releases.slice(0, site.homeReleases) %}
-                    {%- if rels.length %}
+                    {%- if rels.length or nightly %}
                     <ul class="feed">
+                        {%- if nightly %}
+                        <li class="nightly">
+                            <time datetime="{{ nightly.date | isoDate }}">{{ nightly.date | longDate }} &middot; nightly build</time>
+                            <a class="title" href="{{ nightly.url }}">turborel nightly</a>
+                            <p>Built from <code>main</code>{% if nightly.sha %} at <a href="{{ site.github }}/commit/{{ nightly.sha }}">{{ nightly.sha }}</a>{% endif %} once it passed every check. Anything may change from one build to the next.</p>
+                            {%- if nightly.downloads.length %}
+                            <p class="get">{% for d in nightly.downloads %}<a href="{{ d.url }}" title="{{ d.name }}">{{ d.platform }}</a>{% endfor %}</p>
+                            {%- endif %}
+                        </li>
+                        {%- endif %}
                         {%- for r in rels %}
                         <li>
                             <time datetime="{{ r.date | isoDate }}">{{ r.date | longDate }}{% if r.prerelease %} &middot; pre-release{% endif %}</time>
@@ -1052,8 +1084,9 @@ eleventyExcludeFromCollections: true
                         </li>
                         {%- endfor %}
                     </ul>
-                    {%- else %}
-                    <p class="empty">No releases yet. turborel is in alpha, and everything is built from the <code>{{ docs.latest.refName if docs.latest else "main" }}</code> branch{% if docs.latest and docs.latest.sha %}, currently at commit <a href="{{ site.github }}/commit/{{ docs.latest.sha }}">{{ docs.latest.sha }}</a> ({{ docs.latest.date | longDate }}){% endif %}. The <a href="/docs/">documentation</a> follows it as it changes.</p>
+                    {%- endif %}
+                    {%- if not rels.length %}
+                    <p class="empty">No numbered releases yet. turborel is in alpha{% if nightly %}: the nightly above is the way to try it, and the{% else %}, and everything is built from the <code>{{ docs.latest.refName if docs.latest else "main" }}</code> branch{% if docs.latest and docs.latest.sha %}, currently at commit <a href="{{ site.github }}/commit/{{ docs.latest.sha }}">{{ docs.latest.sha }}</a> ({{ docs.latest.date | longDate }}){% endif %}. The{% endif %} <a href="/docs/">documentation</a> follows <code>main</code> as it changes.</p>
                     <p class="empty">Subscribe to the <a href="{{ site.newsletter }}">newsletter</a> to hear when the first release is out.</p>
                     {%- endif %}
                     <p class="more"><a href="{{ site.github }}/releases">All releases on GitHub &raquo;</a></p>

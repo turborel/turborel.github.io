@@ -2,7 +2,8 @@
 // Collects the doc/ folder of turborel/turborel for every version the
 // site shows, into .cache/docs/<version>/doc, and writes
 // .cache/docs/versions.json for the build, plus .cache/docs/releases.json
-// (every release, newest first) for the home page.
+// (every release, newest first) and .cache/docs/nightly.json (the rolling
+// "nightly" pre-release and its downloads, or null) for the home page.
 //
 // Versions come from GitHub releases:
 //   - no releases yet  -> one version, "alpha", built from main
@@ -87,6 +88,22 @@ if (process.env.DOCS_LOCAL) {
 
 // --- releases --------------------------------------------------------------
 
+// The nightly archives are named turborel-nightly-<target triple>.<ext>.
+const PLATFORMS = {
+  "aarch64-apple-darwin": "macOS (Apple silicon)",
+  "x86_64-apple-darwin": "macOS (Intel)",
+  "x86_64-unknown-linux-gnu": "Linux (x86-64)",
+  "aarch64-unknown-linux-gnu": "Linux (ARM64)",
+  "x86_64-pc-windows-msvc": "Windows (x86-64)",
+  "aarch64-pc-windows-msvc": "Windows (ARM64)",
+};
+function platform(file) {
+  const triple = file.replace(/^turborel-nightly-/, "").replace(/\.(tar\.gz|tgz|zip|tar\.xz)$/, "");
+  return PLATFORMS[triple] || triple;
+}
+
+let nightly = null;
+
 async function releasesFromGitHub() {
   const headers = { Accept: "application/vnd.github+json", "User-Agent": "turborel-site" };
   const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
@@ -98,6 +115,16 @@ async function releasesFromGitHub() {
     const batch = await res.json();
     all.push(...batch);
     if (batch.length < 100) break;
+  }
+  const n = all.find((r) => r.tag_name === "nightly" && !r.draft);
+  if (n) {
+    nightly = {
+      name: n.name || "Nightly", date: n.published_at || n.created_at, url: n.html_url,
+      sha: /^[0-9a-f]{40}$/.test(n.target_commitish) ? n.target_commitish.slice(0, 7) : null,
+      downloads: n.assets
+        .map((a) => ({ name: a.name, url: a.browser_download_url, platform: platform(a.name) }))
+        .sort((a, b) => a.platform.localeCompare(b.platform)),
+    };
   }
   return all
     .filter((r) => !r.draft && (INCLUDE_PRE || !r.prerelease))
@@ -232,3 +259,5 @@ fs.writeFileSync(
   path.join(OUT, "versions.json"),
   JSON.stringify({ repo: REPO, branch: BRANCH, generatedAt: new Date().toISOString(), versions: versions.filter((v) => !v.empty) }, null, 2)
 );
+fs.writeFileSync(path.join(OUT, "nightly.json"), JSON.stringify(nightly, null, 2));
+console.log(`docs: nightly.json ${nightly ? `has ${nightly.downloads.length} download(s), ${nightly.sha}` : "is empty"}`);
