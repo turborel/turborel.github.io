@@ -4,31 +4,35 @@
 export default [
   {
     name: "Strict SQL conformance",
-    text: "Standard SQL is treated as one language, from SQL-86 through SQL:2023, and built clause by clause from the standards’ own text.",
+    text: "Standard SQL is treated as one language, from SQL-86 through SQL:2023, and built clause by clause from the standards’ own text. <a target='_blank' href='https://github.com/turborel/turborel/blob/main/CONFORMANCE.md'>CONFORMANCE.md</a> lists the features it claims.",
   },
   {
     name: "Highly extensible",
-    text: "Nearly every part is a plug-in point: storage engines, index methods, data types, functions, optimizer rules, encodings, authentication and wire protocols. Each has a built-in version you can replace or add to.",
+    text: "Nearly every part is a plug-in point: storage engines, index methods, data types, functions, optimizer rules, encodings, authentication and wire protocols. Each has a built-in version you can replace or add to, and a plug-in can also run as a program of its own, installed from a signed package.",
   },
   {
-    name: "Row and column storage",
-    text: "You choose per table. Transactions use multi-version concurrency control, a write-ahead log and crash recovery, at any level up to <code>SERIALIZABLE</code>.",
+    name: "Row and columnar engines",
+    text: "Each table picks its storage engine: row-oriented for transactional work, or columnar for analytics, under the same SQL. Transactions use multi-version concurrency control, a write-ahead log and crash recovery, at any level up to <code>SERIALIZABLE</code>.",
   },
   {
     name: "An index for each kind of data",
-    text: "B-link trees, hash tables, R-trees, full-text indexes, HNSW and DiskANN are built in. A cost-based planner picks among them.",
+    text: "B-link trees, hash tables, R-trees, inverted indexes for full text and JSON, and HNSW, DiskANN and IVF for vectors are built in. A cost-based planner picks among them.",
   },
   {
     name: "Vectors",
-    text: "HNSW and DiskANN indexes and five distance metrics. Hybrid search combines vector similarity, full-text ranking and SQL filters in one query.",
+    text: "Dense and sparse embeddings, with HNSW, DiskANN and IVF indexes. Hybrid search combines vector similarity, full-text ranking and SQL filters in one query.",
   },
   {
     name: "Graphs",
-    text: "GQL and SQL/PGQ property graphs, over the same tables and transactions as the rest of your data.",
+    text: "GQL and SQL/PGQ property graphs, or native node and edge tables, over the same transactions as the rest of your data. Algorithms such as PageRank run in parallel.",
   },
   {
     name: "JSON",
     text: "The SQL/JSON path language, <code>JSON_VALUE</code>, <code>JSON_QUERY</code> and <code>JSON_EXISTS</code>, and the JSON constructors and aggregates.",
+  },
+  {
+    name: "XML",
+    text: "An XML type queried in XQuery 1.0 by <code>XMLQUERY</code> and <code>XMLTABLE</code>, validated against registered XML Schemas, and published from SQL with <code>XMLELEMENT</code> and <code>XMLAGG</code>.",
   },
   {
     name: "Spatial and full-text search",
@@ -48,7 +52,7 @@ export default [
   },
   {
     name: "Secure and replicated",
-    text: "Encryption at rest with AES-256-GCM or ChaCha20-Poly1305, LZ4 compression and TLS. Viewstamped Replication fails over automatically within seconds.",
+    text: "Encryption at rest with AES-256-GCM or ChaCha20-Poly1305, LZ4 compression and TLS. Viewstamped Replication fails over automatically within seconds, and online backups restore to a point in time.",
   },
   {
     name: "Embedded or as a server",
