@@ -876,6 +876,9 @@ eleventyExcludeFromCollections: true
         }
 
         .feed .get a {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
             padding: 2px 8px;
             border: 1px solid #E6DCD5;
             border-radius: 3px;
@@ -886,6 +889,66 @@ eleventyExcludeFromCollections: true
 
         .feed .get a:hover {
             border-color: currentColor;
+        }
+
+        /* the container's pull command, wrapping on phones */
+        .feed .pull {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            padding: 7px 7px 7px 12px;
+            border-radius: 4px;
+            background: #2A1A1B;
+            color: #F1DDD2;
+        }
+
+        .feed .pull code {
+            flex: 1;
+            min-width: 0;
+            font: 500 13px/1.45 "IBM Plex Mono", ui-monospace, monospace;
+            color: inherit;
+            background: none;
+            overflow-wrap: anywhere;
+        }
+
+        .feed .pull code span {
+            color: #F4B08A;
+        }
+
+        .feed .copy {
+            display: inline-flex;
+            flex: none;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 9px;
+            border: 1px solid #5C4446;
+            border-radius: 3px;
+            background: none;
+            color: #F1DDD2;
+            font: 12px/1.2 inherit;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .feed .copy:hover,
+        .feed .copy:focus-visible {
+            border-color: #F4B08A;
+            color: #F4B08A;
+        }
+
+        .feed .copy .icon + .icon,
+        .feed .copy.done .icon:first-child {
+            display: none;
+        }
+
+        .feed .copy.done .icon + .icon {
+            display: inline;
+        }
+
+        .feed .copy.done {
+            border-color: #F4B08A;
+            color: #F4B08A;
         }
 
         .updates .empty {
@@ -1023,6 +1086,11 @@ eleventyExcludeFromCollections: true
             :where(:root[data-theme="dark"]) .feed time,
             :where(:root[data-theme="dark"]) .feed .tag {
                 color: #A89A93;
+            }
+
+            :where(:root[data-theme="dark"]) .feed .pull {
+                background: #120D0E;
+                box-shadow: inset 0 0 0 1px #3A2E2F;
             }
 
             :where(:root[data-theme="dark"]) .feed .latest {
@@ -1369,8 +1437,27 @@ eleventyExcludeFromCollections: true
                             <a class="title" href="{{ nightly.url }}">turborel nightly</a>
                             <p>Built from <code>main</code>{% if nightly.sha %} at <a href="{{ site.github }}/commit/{{ nightly.sha }}">{{ nightly.sha }}</a>{% endif %} once it passed every check. Anything may change from one build to the next.</p>
                             {%- if nightly.downloads.length %}
-                            <p class="get">{% for d in nightly.downloads %}<a href="{{ d.url }}" title="{{ d.name }}">{{ d.platform }}</a>{% endfor %}</p>
+                            <p class="get">{% for d in nightly.downloads %}{% set os = "linux" if "Linux" in d.platform else ("apple" if "macOS" in d.platform else ("windows" if "Windows" in d.platform else "")) %}<a href="{{ d.url }}" title="{{ d.name }}">{{ os | icon(14) | safe }}{{ d.platform }}</a>{% endfor %}<a href="https://github.com/turborel/turborel/pkgs/container/turborel" title="Built from the latest main, for amd64 and arm64">{{ "docker" | icon(14) | safe }}Container</a></p>
                             {%- endif %}
+                            <div class="pull">
+                                <code><span aria-hidden="true">$ </span>docker pull ghcr.io/turborel/turborel:nightly</code>
+                                <button type="button" class="copy" data-copy="docker pull ghcr.io/turborel/turborel:nightly" aria-label="Copy the docker pull command" hidden>{{ "copy" | icon(15) | safe }}{{ "check" | icon(15) | safe }}<span class="copy-label">Copy</span></button>
+                            </div>
+                            <script>
+                            (function () {
+                                var b = document.querySelector(".feed .copy");
+                                if (!b || !navigator.clipboard) return;
+                                b.hidden = false;
+                                var label = b.querySelector(".copy-label"), t;
+                                b.addEventListener("click", function () {
+                                    navigator.clipboard.writeText(b.dataset.copy).then(function () {
+                                        b.classList.add("done"); label.textContent = "Copied";
+                                        clearTimeout(t);
+                                        t = setTimeout(function () { b.classList.remove("done"); label.textContent = "Copy"; }, 1800);
+                                    });
+                                });
+                            })();
+                            </script>
                         </li>
                         {%- endif %}
                         {%- for r in rels %}
