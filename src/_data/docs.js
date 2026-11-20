@@ -83,9 +83,10 @@ function truncate(s, n = 158) {
   return cut.slice(0, cut.lastIndexOf(" ")).replace(/[,;:.\s]+$/, "") + "…";
 }
 
-// Removes the "[Contents](README.md)" line that opens each chapter:
-// the sidebar and breadcrumbs do that job here.
-function stripContentsLine(tokens) {
+// Removes the "[Contents](README.md)" line that opens each chapter (or the
+// volume's name, as "[Specialized Data](README.md)"): the sidebar and
+// breadcrumbs do that job here.
+function stripContentsLine(tokens, volumeUrl) {
   for (let i = 0; i < tokens.length - 2; i++) {
     if (tokens[i].type !== "paragraph_open") continue;
     const kids = tokens[i + 1].children || [];
@@ -93,7 +94,7 @@ function stripContentsLine(tokens) {
       kids.length === 3 &&
       kids[0].type === "link_open" &&
       kids[1].type === "text" &&
-      /^contents$/i.test(kids[1].content.trim());
+      (/^contents$/i.test(kids[1].content.trim()) || kids[0].attrGet("href") === volumeUrl);
     if (isContents) {
       tokens.splice(i, 3);
       return;
@@ -193,7 +194,7 @@ function load() {
 
         const env = { rewriteLink };
         const tokens = md.parse(p.src, env);
-        stripContentsLine(tokens);
+        stripContentsLine(tokens, dir ? target + join(set.base, dir) + "/" : null);
 
         // Table of contents and description from the tokens.
         const toc = [];
