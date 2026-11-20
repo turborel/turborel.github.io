@@ -37,7 +37,7 @@ export default {
 
   tools: [
     { name: "CLI", repo: "turborel/turborel", url: gh("turborel"), description: "The command-line client, turborel. It comes with the server." },
-    { name: "Studio", repo: "turborel/studio", url: gh("studio"), docs: "studio", description: "Your databases, visualized through a GUI." },
+    { name: "Studio", repo: "turborel/studio", url: gh("studio"), docs: "studio", description: "Query, model, tune, administer Turborel from one desktop app." },
   ],
 
   kubernetes: [
