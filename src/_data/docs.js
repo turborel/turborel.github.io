@@ -132,12 +132,14 @@ function load() {
   const broken = [];
   const pages = [];
 
-  // Links to the server's manuals on GitHub, as the drivers' docs cite them,
+  // Links on GitHub into the doc/ of a repo published here (the drivers cite
+  // the server's manuals, the server's Ecosystem volume the operator's guides)
   // go to the same page here.
-  const MAIN_DOC = new RegExp(`^https://github\\.com/${repo.replace("/", "\\/")}/blob/[^/]+/doc/([^#?]+\\.md)(#.*)?$`);
+  const GITHUB_DOC = /^https:\/\/github\.com\/([^/]+\/[^/]+)\/blob\/[^/]+\/doc\/([^#?]+\.md)(#.*)?$/;
 
   for (const v of versions) {
-   const mainFiles = new Map(v.docSets[0].files.map((f) => [f, pagePathOf(f)]));
+   // Each published repo's files, by the page paths they are at here.
+   const repoFiles = new Map(v.docSets.map((s) => [s.repo, new Map(s.files.map((f) => [f, join(s.base, pagePathOf(f))]))]));
    for (const set of v.docSets) {
     const docRoot = set.root;
     const fileToPath = new Map(set.files.map((f) => [f, join(set.base, pagePathOf(f))]));
@@ -165,10 +167,10 @@ function load() {
         const url = target + (p.pagePath ? p.pagePath + "/" : "");
 
         const rewriteLink = (href) => {
-          const gm = MAIN_DOC.exec(href);
-          if (gm && mainFiles.has(decodeURI(gm[1]))) {
-            const tp = mainFiles.get(decodeURI(gm[1]));
-            return target + (tp ? tp + "/" : "") + (gm[2] || "");
+          const gm = GITHUB_DOC.exec(href);
+          if (gm && repoFiles.has(gm[1]) && repoFiles.get(gm[1]).has(decodeURI(gm[2]))) {
+            const tp = repoFiles.get(gm[1]).get(decodeURI(gm[2]));
+            return target + (tp ? tp + "/" : "") + (gm[3] || "");
           }
           if (/^([a-z][a-z0-9+.-]*:|#|\/\/)/i.test(href)) return href;
           const hashAt = href.indexOf("#");
