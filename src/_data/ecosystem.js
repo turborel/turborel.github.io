@@ -9,6 +9,8 @@
 //   docs       where a repo's doc/ folder is published under /docs/, fetched
 //              at the same tag as the server's (they are released together):
 //              docs: "drivers/python" -> /docs/drivers/python/
+//   label      what that documentation set is called in the docs' sidebar
+//              and contents page; a driver's is "<language> driver" by default
 //   kubernetes official ways to run it on Kubernetes
 //   performance  Turborel's forks of standard benchmark tools
 //   community  drivers and tools written by others. Wrote one? Add it here
@@ -40,7 +42,7 @@ export default {
 
   kubernetes: [
     { name: "Helm charts", repo: "turborel/charts", url: "https://charts.turborel.com/", description: "Runs turboreld as a StatefulSet, its database on a volume of its own.", install: "helm repo add turborel https://charts.turborel.com" },
-    { name: "Operator", repo: "turborel/turborel-operator", url: gh("turborel-operator"), description: "A Kubernetes operator for running Turborel." },
+    { name: "Operator", label: "Kubernetes operator", repo: "turborel/turborel-operator", url: gh("turborel-operator"), docs: "kubernetes/operator", description: "A Kubernetes operator for running Turborel." },
   ],
 
   performance: [
