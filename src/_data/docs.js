@@ -69,9 +69,10 @@ function cmp(a, b) {
 
 function inlineText(token) {
   if (!token || !token.children) return token ? token.content : "";
+  // A soft line break is a space, so the words on either side stay apart.
   return token.children
-    .filter((c) => c.type === "text" || c.type === "code_inline")
-    .map((c) => c.content)
+    .filter((c) => c.type === "text" || c.type === "code_inline" || c.type === "softbreak")
+    .map((c) => (c.type === "softbreak" ? " " : c.content))
     .join("")
     .trim();
 }
