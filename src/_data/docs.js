@@ -25,7 +25,7 @@ import path from "node:path";
 import { createMarkdown } from "../../lib/markdown.js";
 
 const ROOT = path.resolve(".cache/docs");
-const DIR_ORDER = ["", "user", "sql", "sql/statements", "operator", "client", "appendix"];
+const DIR_ORDER = ["", "user", "sql", "sql/statements", "operator", "client", "data", "ecosystem", "appendix"];
 const STRICT = process.env.DOCS_STRICT_LINKS === "1";
 
 const md = createMarkdown();
