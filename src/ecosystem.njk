@@ -44,7 +44,8 @@ crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
       <div class="table-wrap"><table>
         <tbody>
           {%- for k in ecosystem.kubernetes %}
-          <tr><td><strong><a href="{{ k.url }}">{{ k.name }}</a></strong></td><td>{{ k.description }}{% if k.install %}<br><code>{{ k.install }}</code>{% endif %}</td><td><a href="https://github.com/{{ k.repo }}"><code>{{ k.repo }}</code></a></td></tr>
+          {%- set docs = patchbay.docsUrl(k) %}
+          <tr><td><strong><a href="{{ k.url }}">{{ k.name }}</a></strong></td><td>{{ k.description }}{% if k.install %}<br><code>{{ k.install }}</code>{% endif %}</td><td>{% if docs != k.url %}<a href="{{ docs }}">Docs</a>{% endif %}</td><td><a href="https://github.com/{{ k.repo }}"><code>{{ k.repo }}</code></a></td></tr>
           {%- endfor %}
         </tbody>
       </table></div>

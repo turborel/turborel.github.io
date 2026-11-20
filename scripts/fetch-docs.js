@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Collects the doc/ folder of turborel/turborel for every version the
 // site shows, into .cache/docs/<version>/doc, and the doc/ folder of each
-// repo src/_data/ecosystem.js gives a docs path (the drivers, Studio), at the
-// same tag, into .cache/docs/<version>/sets/<docs path>/doc. It writes
+// repo src/_data/ecosystem.js gives a docs path (the drivers, Studio, the
+// Kubernetes operator), at the same tag, into
+// .cache/docs/<version>/sets/<docs path>/doc. It writes
 // .cache/docs/versions.json for the build, plus .cache/docs/releases.json
 // (every release, newest first) and .cache/docs/nightly.json (the rolling
 // "nightly" pre-release and its downloads, or null) for the home page.
@@ -250,7 +251,7 @@ for (const v of versions) {
 // Released together with the server, so each version's docs come from the
 // same tag in every repo (main for alpha and dev). A repo without that tag
 // or without a doc/ folder there is left out of that version.
-const SETS = [...ecosystem.official, ...ecosystem.tools].filter((e) => e.docs);
+const SETS = [...ecosystem.official, ...ecosystem.tools, ...ecosystem.kubernetes].filter((e) => e.docs);
 const REPOS = path.resolve(".cache/repos");
 
 function cloneOrFetch(repo) {
@@ -290,7 +291,7 @@ for (const e of SETS) {
     fs.mkdirSync(out, { recursive: true });
     execFileSync("tar", ["-x", "-C", out], { input: git(dir, ["archive", "--format=tar", ref, "doc"], { buffer: true }) });
     (v.sets ||= []).push({
-      path: e.docs, repo: e.repo, name: e.repo.split("/")[1], label: e.language ? `${e.language} driver` : e.name,
+      path: e.docs, repo: e.repo, name: e.repo.split("/")[1], label: e.label || (e.language ? `${e.language} driver` : e.name),
       refName: isTag ? v.refName : BRANCH,
       sha: git(dir, ["rev-parse", "--short", `${ref}^{commit}`]).trim(),
       date: git(dir, ["log", "-1", "--format=%cI", ref]).trim(),
