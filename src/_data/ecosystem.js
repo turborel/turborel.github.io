@@ -6,6 +6,7 @@
 //              server version it was built for
 //   tools      other official programs that connect to it
 //   kubernetes official ways to run it on Kubernetes
+//   performance  Turborel's forks of standard benchmark tools
 //   community  drivers and tools written by others. Wrote one? Add it here
 //              and open a pull request:
 //                { language: "Elixir", name: "turborel_ex",
@@ -36,6 +37,11 @@ export default {
   kubernetes: [
     { name: "Helm charts", repo: "turborel/charts", url: "https://charts.turborel.com/", description: "Runs turboreld as a StatefulSet, its database on a volume of its own.", install: "helm repo add turborel https://charts.turborel.com" },
     { name: "Operator", repo: "turborel/turborel-operator", url: gh("turborel-operator"), description: "A Kubernetes operator for running Turborel." },
+  ],
+
+  performance: [
+    { name: "sysbench", repo: "turborel/sysbench", url: gh("sysbench"), description: "Scriptable database and system benchmarks, with OLTP read and write workloads, run against Turborel." },
+    { name: "HammerDB", repo: "turborel/HammerDB", url: gh("HammerDB"), description: "The industry-standard TPROC-C and TPROC-H workloads, derived from TPC-C and TPC-H, run against Turborel." },
   ],
 
   community: [],

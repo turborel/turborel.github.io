@@ -1,8 +1,9 @@
 ---
 layout: base.njk
 permalink: /ecosystem/
+section: ecosystem
 title: Ecosystem — Turborel
-description: Use Turborel from Rust, where it's built in, or from JavaScript, Python, Go, Java, C#, C++, C, PHP and Ruby with the official ecosystem. Plus the CLI, Studio, Helm charts and drivers from the community.
+description: Use Turborel from Rust, where it's built in, or from JavaScript, Python, Go, Java, C#, C++, C, PHP and Ruby with the official drivers. Plus the CLI, Studio, Helm charts, the Kubernetes operator, benchmark tools and projects from the community.
 crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
 ---
 {#- Everything here comes from src/_data/ecosystem.js; community entries are
@@ -12,7 +13,7 @@ crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
   <main id="content" class="sheet">
     <article class="doc ecosystem">
       <h1 class="page-title">Ecosystem</h1>
-      <p class="lede">Drivers for your language, the tools that come with Turborel, ways to run it on Kubernetes, and projects from the community.</p>
+      <p class="lede">Drivers for your language, the tools that come with Turborel, ways to run it on Kubernetes, benchmarks to measure it, and projects from the community.</p>
 
       <h2>Built in</h2>
       <p><strong>{{ ecosystem.builtin.language }}.</strong> Turborel is written in Rust, and its Rust library ships with the server and the CLI in <a href="{{ ecosystem.builtin.url }}"><code>{{ ecosystem.builtin.repo }}</code></a>. Embed the database in your application, or connect to a <code>turboreld</code> server.</p>
@@ -42,6 +43,16 @@ crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
         <tbody>
           {%- for k in ecosystem.kubernetes %}
           <tr><td><strong><a href="{{ k.url }}">{{ k.name }}</a></strong></td><td>{{ k.description }}{% if k.install %}<br><code>{{ k.install }}</code>{% endif %}</td><td><a href="https://github.com/{{ k.repo }}"><code>{{ k.repo }}</code></a></td></tr>
+          {%- endfor %}
+        </tbody>
+      </table></div>
+
+      <h2>Performance</h2>
+      <p>Turborel&rsquo;s own forks of standard benchmark tools, for running industry-standard workloads against it.</p>
+      <div class="table-wrap"><table>
+        <tbody>
+          {%- for b in ecosystem.performance %}
+          <tr><td><strong><a href="{{ b.url }}">{{ b.name }}</a></strong></td><td>{{ b.description }}</td><td><a href="https://github.com/{{ b.repo }}"><code>{{ b.repo }}</code></a></td></tr>
           {%- endfor %}
         </tbody>
       </table></div>

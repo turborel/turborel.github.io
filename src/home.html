@@ -511,6 +511,14 @@ eleventyExcludeFromCollections: true
             }
         }
 
+        .header .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: inherit;
+            text-decoration: none;
+        }
+
         .header img {
             display: block;
             height: 28px;             /* mascot fills the full header height */
@@ -1147,12 +1155,13 @@ eleventyExcludeFromCollections: true
     </script>
     {%- endif %}
     <header class="header">
-        <img width="28" src="assets/turborel-mascot-white.svg" alt="Turborel mascot"><h1>TURBOREL</h1>
+        <a class="brand" href="/"><img width="28" src="assets/turborel-mascot-white.svg" alt=""><h1>TURBOREL</h1></a>
         {% include "theme-toggle.njk" %}
         {% include "menu.njk" %}
         <nav class="site-nav" id="site-nav" aria-label="Site">
             <a href="/docs/">Docs</a>
             <a href="/blog/">Blog</a>
+            <a href="/ecosystem/">Ecosystem</a>
             <a href="https://github.com/turborel/turborel">GitHub</a>
             <a href="https://forms.gle/YNJ5YGpBTFW9vvTj8">Newsletter</a>
         </nav>
