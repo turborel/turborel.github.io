@@ -85,7 +85,7 @@ function tall(list) {
   const bottom = top + (rows - 1) * gap + 70;
   const down = (x) => f(cy + Math.sqrt(r * r - (x - cx) ** 2));
   return {
-    viewBox: `0 30 600 ${bottom + 150 - 30}`, cx, cy, r, sock, jacks, slots: slots(cx, cy, 0.9), tall: true,
+    viewBox: `0 30 600 ${bottom + 176 - 30}`, cx, cy, r, sock, jacks, slots: slots(cx, cy, 0.9), tall: true,
     cli: { x: 90, y: bottom, lx: 150, ly: bottom + 112, anchor: "middle", cable: `M270,${down(270)} V${bottom - 24} H150 V${bottom}` },
     studio: { x: 390, y: bottom, lx: 450, ly: bottom + 112, anchor: "middle", cable: `M330,${down(330)} V${bottom - 24} H450 V${bottom}` },
   };

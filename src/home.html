@@ -1325,7 +1325,7 @@ eleventyExcludeFromCollections: true
                             <rect x="12" y="11" width="96" height="46" rx="4" fill="#2A1A1B"/>
                             <rect x="20" y="39" width="13" height="12" fill="#F4B08A"/><rect x="38" y="29" width="13" height="22" fill="#E58A5C"/><rect x="56" y="19" width="13" height="32" fill="#F1DDD2"/><circle cx="90" cy="35" r="11" fill="none" stroke="#F4B08A" stroke-width="4.5" stroke-dasharray="42 30"/>
                         </g>
-                        <text class="tool" x="{{ L.studio.lx }}" y="{{ L.studio.ly }}" text-anchor="{{ L.studio.anchor }}">Studio</text><text class="sub" x="{{ L.studio.lx }}" y="{{ L.studio.ly + (26 if L.tall else 20) }}" text-anchor="{{ L.studio.anchor }}">Your databases, visualized</text>
+                        <text class="tool" x="{{ L.studio.lx }}" y="{{ L.studio.ly }}" text-anchor="{{ L.studio.anchor }}">Studio</text><text class="sub" x="{{ L.studio.lx }}" y="{{ L.studio.ly + (26 if L.tall else 20) }}" text-anchor="{{ L.studio.anchor }}"><tspan>Query, model, tune, administer</tspan><tspan x="{{ L.studio.lx }}" dy="{{ 26 if L.tall else 20 }}">Turborel from one desktop app.</tspan></text>
                     </a>
                     {%- for j in L.jacks %}
                     <a class="jack" href="{{ j.url }}" data-i="{{ loop.index0 }}">
