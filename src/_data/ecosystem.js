@@ -5,6 +5,10 @@
 //              released together with the server: a driver's version is the
 //              server version it was built for
 //   tools      other official programs that connect to it
+//
+//   docs       where a repo's doc/ folder is published under /docs/, fetched
+//              at the same tag as the server's (they are released together):
+//              docs: "drivers/python" -> /docs/drivers/python/
 //   kubernetes official ways to run it on Kubernetes
 //   performance  Turborel's forks of standard benchmark tools
 //   community  drivers and tools written by others. Wrote one? Add it here
@@ -18,20 +22,20 @@ export default {
   builtin: { language: "Rust", repo: "turborel/turborel", url: gh("turborel") },
 
   official: [
-    { language: "JavaScript", repo: "turborel/turborel-js", url: gh("turborel-js") },
-    { language: "Python", repo: "turborel/turborel-py", url: gh("turborel-py") },
-    { language: "Go", repo: "turborel/turborel-go", url: gh("turborel-go") },
-    { language: "Java", repo: "turborel/turborel-java", url: gh("turborel-java") },
-    { language: "C#", repo: "turborel/turborel-cs", url: gh("turborel-cs") },
-    { language: "C++", repo: "turborel/turborel-cpp", url: gh("turborel-cpp") },
-    { language: "C", repo: "turborel/turborel-c", url: gh("turborel-c") },
-    { language: "PHP", repo: "turborel/turborel-php", url: gh("turborel-php") },
-    { language: "Ruby", repo: "turborel/turborel-ruby", url: gh("turborel-ruby") },
+    { language: "JavaScript", repo: "turborel/turborel-js", url: gh("turborel-js"), docs: "drivers/javascript" },
+    { language: "Python", repo: "turborel/turborel-py", url: gh("turborel-py"), docs: "drivers/python" },
+    { language: "Go", repo: "turborel/turborel-go", url: gh("turborel-go"), docs: "drivers/go" },
+    { language: "Java", repo: "turborel/turborel-java", url: gh("turborel-java"), docs: "drivers/java" },
+    { language: "C#", repo: "turborel/turborel-cs", url: gh("turborel-cs"), docs: "drivers/csharp" },
+    { language: "C++", repo: "turborel/turborel-cpp", url: gh("turborel-cpp"), docs: "drivers/cpp" },
+    { language: "C", repo: "turborel/turborel-c", url: gh("turborel-c"), docs: "drivers/c" },
+    { language: "PHP", repo: "turborel/turborel-php", url: gh("turborel-php"), docs: "drivers/php" },
+    { language: "Ruby", repo: "turborel/turborel-ruby", url: gh("turborel-ruby"), docs: "drivers/ruby" },
   ],
 
   tools: [
     { name: "CLI", repo: "turborel/turborel", url: gh("turborel"), description: "The command-line client, turborel. It comes with the server." },
-    { name: "Studio", repo: "turborel/studio", url: gh("studio"), description: "Your databases, visualized through a GUI." },
+    { name: "Studio", repo: "turborel/studio", url: gh("studio"), docs: "studio", description: "Your databases, visualized through a GUI." },
   ],
 
   kubernetes: [

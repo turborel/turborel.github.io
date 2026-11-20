@@ -21,10 +21,11 @@ crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
       <h2>Official drivers</h2>
       <p>Maintained by the Turborel project, and released together with the server: a driver&rsquo;s version is the server version it was built for.{% if not latest %} There are no releases yet, so every driver follows its repo&rsquo;s main branch, alongside the server&rsquo;s.{% endif %}</p>
       <div class="table-wrap"><table>
-        <thead><tr><th>Language</th><th>Repository</th><th>Version</th></tr></thead>
+        <thead><tr><th>Language</th><th>Documentation</th><th>Repository</th><th>Version</th></tr></thead>
         <tbody>
           {%- for d in ecosystem.official %}
-          <tr><td>{{ d.language }}</td><td><a href="{{ d.url }}"><code>{{ d.repo }}</code></a></td><td>{% if latest %}{{ latest.version }}{% else %}alpha{% endif %}</td></tr>
+          {%- set docs = patchbay.docsUrl(d) %}
+          <tr><td>{{ d.language }}</td><td>{% if docs != d.url %}<a href="{{ docs }}">Docs</a>{% else %}<span class="none">Coming</span>{% endif %}</td><td><a href="{{ d.url }}"><code>{{ d.repo }}</code></a></td><td>{% if latest %}{{ latest.version }}{% else %}alpha{% endif %}</td></tr>
           {%- endfor %}
         </tbody>
       </table></div>
@@ -33,7 +34,8 @@ crumbs: [{ label: "Turborel", url: "/" }, { label: "Ecosystem" }]
       <div class="table-wrap"><table>
         <tbody>
           {%- for t in ecosystem.tools %}
-          <tr><td><strong>{{ t.name }}</strong></td><td>{{ t.description }}</td><td><a href="{{ t.url }}"><code>{{ t.repo }}</code></a></td></tr>
+          {%- set docs = patchbay.docsUrl(t) %}
+          <tr><td><strong>{% if docs != t.url %}<a href="{{ docs }}">{{ t.name }}</a>{% else %}{{ t.name }}{% endif %}</strong></td><td>{{ t.description }}</td><td><a href="{{ t.url }}"><code>{{ t.repo }}</code></a></td></tr>
           {%- endfor %}
         </tbody>
       </table></div>

@@ -12,6 +12,11 @@
 //                            /docs/alpha/<page>/ links then redirect here
 // Codenames are shown in titles and breadcrumbs, never in URLs.
 //
+// The drivers' and Studio's docs (fetched into .cache/docs/<version>/sets/)
+// are sets of their own inside each version, under their docs path:
+//   /docs/drivers/python/user/connecting/, /docs/0.1/drivers/python/...
+// each with its own contents, previous and next, and source links.
+//
 // Numbers in file names are dropped from URLs, so reordering chapters
 // doesn't break links: user/02-getting-started.md -> user/getting-started/.
 
@@ -109,24 +114,39 @@ function load() {
   const latest = versions.find((v) => v.latest) || versions[0];
   const released = versions.some((v) => v.kind === "release");
 
-  // Where each version lives.
+  // Where each version lives, and its sets: the server's docs, then each
+  // driver's and Studio's. A set's pages sit under its base path.
+  const join = (base, pp) => [base, pp].filter(Boolean).join("/");
   for (const v of versions) {
     v.prefix = v.latest ? "/docs/" : `/docs/${v.id}/`;
     v.targets = v.latest ? ["/docs/", `/docs/${v.id}/`] : [v.prefix];
     v.title = v.codename ? `${v.label} “${v.codename}”` : v.label; // for titles and breadcrumbs
-    v.files = walk(path.join(ROOT, v.id, "doc")).sort(cmp);
-    v.paths = new Set(v.files.map(pagePathOf));
+    v.docSets = [
+      { base: "", main: true, name: "Turborel", repo, refName: v.refName, sha: v.sha, date: v.date, root: path.join(ROOT, v.id, "doc") },
+      ...(v.sets || []).map((x) => ({ ...x, base: x.path, root: path.join(ROOT, v.id, "sets", x.path, "doc") })),
+    ];
+    for (const set of v.docSets) set.files = walk(set.root).sort(cmp);
+    v.paths = new Set(v.docSets.flatMap((set) => set.files.map((f) => join(set.base, pagePathOf(f)))));
   }
 
   const broken = [];
   const pages = [];
 
+  // Links to the server's manuals on GitHub, as the drivers' docs cite them,
+  // go to the same page here.
+  const MAIN_DOC = new RegExp(`^https://github\\.com/${repo.replace("/", "\\/")}/blob/[^/]+/doc/([^#?]+\\.md)(#.*)?$`);
+
   for (const v of versions) {
-    const docRoot = path.join(ROOT, v.id, "doc");
-    const fileToPath = new Map(v.files.map((f) => [f, pagePathOf(f)]));
+   const mainFiles = new Map(v.docSets[0].files.map((f) => [f, pagePathOf(f)]));
+   for (const set of v.docSets) {
+    const docRoot = set.root;
+    const fileToPath = new Map(set.files.map((f) => [f, join(set.base, pagePathOf(f))]));
+    const setRoot = set.base ? set.base + "/" : "";
+    const installing = [...fileToPath.values()].find((pp) => pp === join(set.base, "user/installing"));
+    const setTitle = set.main ? `Turborel ${v.title} documentation` : `${set.name} ${v.title} documentation`;
 
     // Parse every file once per version.
-    const parsed = v.files.map((rel) => {
+    const parsed = set.files.map((rel) => {
       const src = fs.readFileSync(path.join(docRoot, rel), "utf8");
       return { rel, src, pagePath: fileToPath.get(rel) };
     });
@@ -145,6 +165,11 @@ function load() {
         const url = target + (p.pagePath ? p.pagePath + "/" : "");
 
         const rewriteLink = (href) => {
+          const gm = MAIN_DOC.exec(href);
+          if (gm && mainFiles.has(decodeURI(gm[1]))) {
+            const tp = mainFiles.get(decodeURI(gm[1]));
+            return target + (tp ? tp + "/" : "") + (gm[2] || "");
+          }
           if (/^([a-z][a-z0-9+.-]*:|#|\/\/)/i.test(href)) return href;
           const hashAt = href.indexOf("#");
           const hrefPath = hashAt >= 0 ? href.slice(0, hashAt) : href;
@@ -158,12 +183,12 @@ function load() {
               return target + (tp ? tp + "/" : "") + hash;
             }
             if (!relTarget.endsWith(".md") && fs.existsSync(path.join(docRoot, relTarget))) {
-              return `https://github.com/${repo}/blob/${v.refName}/${inRepo}${hash}`;
+              return `https://github.com/${set.repo}/blob/${set.refName}/${inRepo}${hash}`;
             }
-            if (isCanonicalTree || v.targets.length === 1) broken.push(`${v.id}: doc/${p.rel} → ${href}`);
+            if (isCanonicalTree || v.targets.length === 1) broken.push(`${v.id}: ${set.main ? "" : set.repo + " "}doc/${p.rel} → ${href}`);
           }
           // Outside doc/ (CONFORMANCE.md, VERSIONING.md, …): link to GitHub at this version.
-          return `https://github.com/${repo}/blob/${v.refName}/${inRepo}${hash}`;
+          return `https://github.com/${set.repo}/blob/${set.refName}/${inRepo}${hash}`;
         };
 
         const env = { rewriteLink };
@@ -191,14 +216,16 @@ function load() {
 
         // Breadcrumbs: the set's contents, then each enclosing volume.
         const crumbs = [{ label: `Turborel ${v.title} documentation`, url: target }];
+        if (!set.main) crumbs.push({ label: set.label, url: target + setRoot });
         const parts = dir ? dir.split("/") : [];
         for (let n = 1; n <= parts.length; n++) {
           const d = parts.slice(0, n).join("/");
-          const readme = v.files.find((f) => f.toLowerCase() === `${d}/readme.md`);
+          const readme = set.files.find((f) => f.toLowerCase() === `${d}/readme.md`);
           if (readme && readme !== p.rel) crumbs.push({ label: titleOf.get(readme), url: target + fileToPath.get(readme) + "/" });
         }
-        if (p.pagePath) crumbs.push({ label: titleOf.get(p.rel) });
-        else crumbs[0] = { label: crumbs[0].label };
+        const isRoot = p.pagePath === set.base;
+        if (!isRoot) crumbs.push({ label: titleOf.get(p.rel) });
+        else crumbs[crumbs.length - 1] = { label: crumbs[crumbs.length - 1].label };
 
         const link = (j) =>
           j >= 0 && j < parsed.length
@@ -221,12 +248,12 @@ function load() {
         if (v.kind === "alpha") {
           banner = {
             title: "Alpha",
-            text: `These pages are built from ${v.refName}, turborel 0.0.0. Anything may change from one build to the next: SQL, API, protocol and files alike.`,
+            text: `These pages are built from ${set.main ? "" : set.name + "’s "}${set.refName}, turborel 0.0.0. Anything may change from one build to the next: SQL, API, protocol and files alike.`,
           };
         } else if (v.kind === "dev") {
           banner = {
             title: "Development version",
-            text: `You are reading the documentation built from ${v.refName}, which may describe what no release has yet.`,
+            text: `You are reading the documentation built from ${set.main ? "" : set.name + "’s "}${set.refName}, which may describe what no release has yet.`,
             link: { label: `Read this page for ${latest.label}${latest.codename ? " (" + latest.codename + ")" : ""}, the latest release.`, url: latestUrl },
           };
         } else if (!v.latest) {
@@ -243,7 +270,9 @@ function load() {
           indexable: isCanonicalTree,
           noindex: v.kind === "dev",
           title: titleOf.get(p.rel),
-          description: description || `${titleOf.get(p.rel)}: Turborel ${v.label} documentation.`,
+          setTitle,
+          isRoot,
+          description: description || `${titleOf.get(p.rel)}: ${setTitle}.`,
           html,
           toc,
           crumbs,
@@ -257,12 +286,18 @@ function load() {
           permalinkNote:
             v.kind === "release"
               ? `This page in turborel ${v.title}; the link stays on this release after newer ones`
-              : `This page as built from ${v.refName}; it changes as ${v.refName} does`,
-          sourceUrl: `https://github.com/${repo}/blob/${v.refName}/doc/${p.rel}`,
+              : `This page as built from ${set.refName}; it changes as ${set.refName} does`,
+          sourceUrl: `https://github.com/${set.repo}/blob/${set.refName}/doc/${p.rel}`,
+          source: { repo: set.repo, refName: set.refName, sha: set.sha, date: set.date },
+          // A driver's or Studio's own links, for the sidebar.
+          setNav: set.main ? null : { label: set.label, repo: set.repo, home: target + setRoot, installing: installing ? target + installing + "/" : null },
+          // On the server docs' contents page: the drivers' and Studio's docs.
+          sets: set.main && isRoot ? v.docSets.filter((x) => !x.main).map((x) => ({ label: x.label, name: x.name, url: target + x.base + "/" })) : null,
           version: { id: v.id, label: v.label, title: v.title, codename: v.codename || null, sub: v.sub, kind: v.kind, sha: v.sha, date: v.date, refName: v.refName },
         });
       });
     }
+   }
   }
 
   if (broken.length) {
@@ -283,7 +318,7 @@ function load() {
   }
 
   for (const v of versions) {
-    delete v.files;
+    delete v.docSets;
     delete v.paths;
   }
 

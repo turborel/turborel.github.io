@@ -1,5 +1,6 @@
-# Goes in turborel/turborel. Tells turborel.github.io to rebuild the site
-# when the manuals change on main or a release is published.
+# Goes in turborel/turborel, and the same file in each driver's repo and
+# turborel/studio. Tells turborel.github.io to rebuild the site when the
+# manuals change on main or a release is published.
 #
 # Needs a secret SITE_DISPATCH_TOKEN: a fine-grained personal access token
 # (or GitHub App token) for turborel/turborel.github.io with

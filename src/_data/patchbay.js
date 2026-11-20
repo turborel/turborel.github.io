@@ -6,7 +6,18 @@
 //   tall  the ring on top, sockets in two columns under it, each cable
 //         running up its own lane at the edge (phones and tablets), drawn
 //         larger so its text stays readable when scaled down
+import fs from "node:fs";
 import ecosystem from "./ecosystem.js";
+
+// A driver's or Studio's docs page when the latest docs have it
+// (scripts/fetch-docs.js found its doc/ folder), else its repository.
+let published = new Set();
+try {
+  const { versions } = JSON.parse(fs.readFileSync(".cache/docs/versions.json", "utf8"));
+  const latest = versions.find((v) => v.latest) || versions[0];
+  published = new Set((latest.sets || []).map((x) => x.path));
+} catch {}
+const docsUrl = (e) => (e.docs && published.has(e.docs) ? `/docs/${e.docs}/` : e.url);
 
 const COLORS = ["#F4B08A", "#E58A5C", "#F1DDD2", "#FFFFFF"];
 const f = (n) => +n.toFixed(1);
@@ -25,7 +36,7 @@ function cylinder(x, y, top, pid) {
 function entries() {
   return [
     { label: ecosystem.builtin.language, sub: "built in · turborel", url: ecosystem.builtin.url, native: true },
-    ...ecosystem.official.map((d) => ({ label: d.language, sub: d.repo.split("/")[1], url: d.url })),
+    ...ecosystem.official.map((d) => ({ label: d.language, sub: d.repo.split("/")[1], url: docsUrl(d) })),
   ].map((d, i) => ({ ...d, color: d.native ? "#FFFFFF" : COLORS[(i - 1) % COLORS.length] }));
 }
 
@@ -86,8 +97,9 @@ export default function () {
   return {
     layouts: [wide(list), tall(list)],
     cliUrl: tool("CLI").url,
-    studioUrl: tool("Studio").url,
+    studioUrl: docsUrl(tool("Studio")),
     live: [0, 2, 5], // the nodes shown at first, and without JavaScript
     cylinder,
+    docsUrl,
   };
 }

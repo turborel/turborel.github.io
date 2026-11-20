@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 // Collects the doc/ folder of turborel/turborel for every version the
-// site shows, into .cache/docs/<version>/doc, and writes
+// site shows, into .cache/docs/<version>/doc, and the doc/ folder of each
+// repo src/_data/ecosystem.js gives a docs path (the drivers, Studio), at the
+// same tag, into .cache/docs/<version>/sets/<docs path>/doc. It writes
 // .cache/docs/versions.json for the build, plus .cache/docs/releases.json
 // (every release, newest first) and .cache/docs/nightly.json (the rolling
 // "nightly" pre-release and its downloads, or null) for the home page.
@@ -22,6 +24,7 @@
 import { execFileSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
+import ecosystem from "../src/_data/ecosystem.js";
 
 const REPO = process.env.DOCS_REPO || "turborel/turborel";
 const BRANCH = process.env.DOCS_BRANCH || "main";
@@ -240,6 +243,60 @@ for (const v of versions) {
   const tar = git(src, ["archive", "--format=tar", v.ref, "doc"], { buffer: true });
   execFileSync("tar", ["-x", "-C", dir], { input: tar });
   console.log(`docs: ${v.label.padEnd(6)} ← ${v.refName} @ ${v.sha}`);
+}
+
+// --- the drivers' and Studio's doc/, at the same version ------------------
+
+// Released together with the server, so each version's docs come from the
+// same tag in every repo (main for alpha and dev). A repo without that tag
+// or without a doc/ folder there is left out of that version.
+const SETS = [...ecosystem.official, ...ecosystem.tools].filter((e) => e.docs);
+const REPOS = path.resolve(".cache/repos");
+
+function cloneOrFetch(repo) {
+  const dir = path.join(REPOS, repo.split("/")[1]);
+  const url = `https://github.com/${repo}.git`;
+  if (fs.existsSync(path.join(dir, ".git"))) {
+    git(dir, ["fetch", "--force", "--tags", "--prune", "origin", `+refs/heads/${BRANCH}:refs/remotes/origin/${BRANCH}`]);
+  } else {
+    fs.mkdirSync(REPOS, { recursive: true });
+    execFileSync("git", ["clone", "--filter=blob:none", "--no-checkout", url, dir], { stdio: ["ignore", "ignore", "pipe"] });
+  }
+  // A package's .gitattributes may export-ignore doc/ (turborel-php's does,
+  // for Composer); git archive must still include it here.
+  fs.mkdirSync(path.join(dir, ".git", "info"), { recursive: true });
+  fs.writeFileSync(path.join(dir, ".git", "info", "attributes"), "* -export-ignore -export-subst\n");
+  return dir;
+}
+
+for (const e of SETS) {
+  let dir;
+  try {
+    dir = cloneOrFetch(e.repo);
+  } catch (err) {
+    console.warn(`docs: could not fetch ${e.repo} (${String(err.message).split("\n")[0]}); skipped`);
+    continue;
+  }
+  for (const v of versions) {
+    if (v.empty) continue;
+    const isTag = v.kind === "release";
+    const ref = isTag ? `refs/tags/${v.refName}` : `origin/${BRANCH}`;
+    if (isTag && !tryGit(dir, ["rev-parse", "--verify", `${ref}^{commit}`])) tryGit(dir, ["fetch", "--force", "origin", `+${ref}:${ref}`]);
+    if (!tryGit(dir, ["cat-file", "-t", `${ref}:doc`])) {
+      console.warn(`docs: ${e.repo} has no doc/ at ${isTag ? v.refName : BRANCH}; left out of ${v.label}`);
+      continue;
+    }
+    const out = path.join(OUT, v.id, "sets", e.docs);
+    fs.mkdirSync(out, { recursive: true });
+    execFileSync("tar", ["-x", "-C", out], { input: git(dir, ["archive", "--format=tar", ref, "doc"], { buffer: true }) });
+    (v.sets ||= []).push({
+      path: e.docs, repo: e.repo, name: e.repo.split("/")[1], label: e.language ? `${e.language} driver` : e.name,
+      refName: isTag ? v.refName : BRANCH,
+      sha: git(dir, ["rev-parse", "--short", `${ref}^{commit}`]).trim(),
+      date: git(dir, ["log", "-1", "--format=%cI", ref]).trim(),
+    });
+    console.log(`docs: ${v.label.padEnd(6)} ← ${e.repo} → /docs/${e.docs}/`);
+  }
 }
 
 // Every release, newest first, for the home page's "Releases" list.

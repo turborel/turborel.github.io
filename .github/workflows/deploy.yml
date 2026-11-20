@@ -1,6 +1,6 @@
 # Builds turborel.com (home, versioned docs, blog) and publishes it to
-# GitHub Pages. Runs on a push here, when turborel/turborel signals a docs
-# change or a release (see extras/turborel-repo), nightly, and by hand.
+# GitHub Pages. Runs on a push here, when turborel/turborel, a driver or
+# Studio signals a docs change or a release (see extras/turborel-repo), nightly, and by hand.
 name: Deploy site
 
 on:
@@ -32,10 +32,12 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Cache the turborel clone
+      - name: Cache the clones of turborel, the drivers and Studio
         uses: actions/cache@v4
         with:
-          path: .cache/repo
+          path: |
+            .cache/repo
+            .cache/repos
           key: turborel-repo-${{ github.run_id }}
           restore-keys: turborel-repo-
 

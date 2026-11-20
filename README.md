@@ -50,8 +50,22 @@ the next night:
    add it as `SITE_DISPATCH_TOKEN`.
 3. Copy `extras/turborel-repo/.github/workflows/docs-site.yml` into
    `turborel/turborel` at `.github/workflows/docs-site.yml` and push.
+4. Do the same in each driver's repo and in `turborel/studio`: the same
+   file, and the same secret (or add `SITE_DISPATCH_TOKEN` once as an
+   organization secret for all of them).
 
 You can delete `extras/` from this repository afterwards.
+
+## Drivers' and Studio's docs
+
+Each repo in `src/_data/ecosystem.js` with a `docs` path (the nine drivers
+and Studio) has its `doc/` folder published under `/docs/<docs path>/`, for
+example `/docs/drivers/python/`. They are released together with the
+server, so each version's copy comes from the same tag in every repo
+(`main` for alpha and dev); a repo without that tag, or without `doc/`, is
+left out of that version. Their links to the server's manuals on GitHub go
+to the same pages here. The home page's jacks and `/ecosystem/` link to a
+driver's docs once they are published, and to its repo until then.
 
 ## How versions work
 

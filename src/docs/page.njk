@@ -5,10 +5,7 @@
   layout: "base.njk",
   section: "docs",
   eleventyComputed: {
-    title: (data) =>
-      data.doc.crumbs.length === 1
-        ? `Turborel ${data.doc.version.title} documentation`
-        : `${data.doc.title} — Turborel ${data.doc.version.title} documentation`,
+    title: (data) => (data.doc.isRoot ? data.doc.setTitle : `${data.doc.title} — ${data.doc.setTitle}`),
     description: (data) => data.doc.description,
     canonical: (data) => data.doc.canonical,
     noindex: (data) => data.doc.noindex,
@@ -23,9 +20,9 @@
       { label: "next", url: data.doc.next && data.doc.next.url, rel: "next" },
     ],
     footerNote: (data) => {
-      const v = data.doc.version;
-      const day = new Date(v.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
-      return `Last updated ${day} · built from <a href="https://github.com/${data.site.repo}/tree/${v.refName}">${data.site.repo}@${v.sha}</a> (${v.label}).`;
+      const v = data.doc.version, s = data.doc.source;
+      const day = new Date(s.date).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
+      return `Last updated ${day} · built from <a href="https://github.com/${s.repo}/tree/${s.refName}">${s.repo}@${s.sha}</a> (${v.label}).`;
     },
     jsonld: (data) => {
       const d = data.doc;
@@ -83,6 +80,19 @@
       </div>
     </form>
 
+    {% if doc.setNav %}
+    <nav class="sb-block" aria-labelledby="set-title">
+      <h2 class="sb-title" id="set-title">{{ doc.setNav.label }}</h2>
+      <ul>
+        <li><a href="{{ doc.setNav.home }}">Contents</a></li>
+        {%- if doc.setNav.installing %}
+        <li><a href="{{ doc.setNav.installing }}">Installing</a></li>
+        {%- endif %}
+        <li><a href="https://github.com/{{ doc.setNav.repo }}">{{ doc.setNav.repo }}</a> on GitHub</li>
+      </ul>
+    </nav>
+    {% endif %}
+
     {% if doc.toc.length %}
     <nav class="sb-block" aria-labelledby="toc-title">
       <h2 class="sb-title" id="toc-title">Table of Contents</h2>
@@ -106,7 +116,7 @@
       <ul>
         <li><a href="{{ doc.permalink }}" title="{{ doc.permalinkNote }}">Permanent link</a></li>
         <li><a href="{{ doc.sourceUrl }}">Show Source</a></li>
-        <li><a href="{{ site.github }}/issues/new?title={{ ('Docs: ' + doc.title) | urlencode }}">Report a problem</a></li>
+        <li><a href="https://github.com/{{ doc.source.repo }}/issues/new?title={{ ('Docs: ' + doc.title) | urlencode }}">Report a problem</a></li>
       </ul>
     </div>
   </aside>
@@ -120,6 +130,15 @@
     {% endif %}
     <article class="doc">
       {{ doc.html | safe }}
+      {%- if doc.sets and doc.sets.length %}
+      <h2 id="drivers-and-tools">Drivers and tools</h2>
+      <p>Each has a documentation set of its own, released with this version of Turborel.</p>
+      <ul class="doc-sets">
+        {%- for x in doc.sets %}
+        <li><a href="{{ x.url }}">{{ x.label }}</a> <span class="muted">{{ x.name }}</span></li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
     </article>
     {% if doc.prev or doc.next %}
     <nav class="pager" aria-label="Pagination" data-pagefind-ignore>
