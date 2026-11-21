@@ -67,6 +67,12 @@ left out of that version. Their links to the server's manuals on GitHub go
 to the same pages here. The home page's jacks and `/ecosystem/` link to a
 driver's docs once they are published, and to its repo until then.
 
+Images in a `doc/` folder (Studio's screenshots, say) are copied to
+`/docs/<version>/<docs path>/…`, one copy per version, and pages point
+there. An image named `*-light.*` shows only in the light theme and one
+named `*-dark.*` only in the dark theme, so a pair of screenshots shows the
+one matching the reader's theme (GitHub shows both).
+
 ## How versions work
 
 `scripts/fetch-docs.js` reads the GitHub releases of `turborel/turborel`:

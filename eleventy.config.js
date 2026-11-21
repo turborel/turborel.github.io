@@ -18,6 +18,21 @@ export default function (eleventyConfig) {
   eleventyConfig.ignores.add("src/blog/files/**"); // copied as is, never rendered (.md, .html…)
   eleventyConfig.ignores.add("src/blog/images/**");
   eleventyConfig.addPassthroughCopy("CNAME");
+
+  // The docs' images and other files (anything in a doc/ but its .md pages)
+  // go to /docs/<version>/<set>/…, where src/_data/docs.js points them.
+  eleventyConfig.on("eleventy.after", ({ dir }) => {
+    let versions = [];
+    try { ({ versions } = JSON.parse(fs.readFileSync(".cache/docs/versions.json", "utf8"))); } catch { return; }
+    const notMd = (f) => !f.toLowerCase().endsWith(".md");
+    for (const v of versions) {
+      const sets = [{ from: `.cache/docs/${v.id}/doc`, to: "" }, ...(v.sets || []).map((s) => ({ from: `.cache/docs/${v.id}/sets/${s.path}/doc`, to: s.path }))];
+      for (const s of sets) {
+        if (!fs.existsSync(s.from)) continue;
+        fs.cpSync(s.from, `${dir.output}/docs/${v.id}/${s.to}`, { recursive: true, filter: notMd });
+      }
+    }
+  });
   eleventyConfig.addPassthroughCopy({ "src/assets/favicon.ico": "favicon.ico" }); // browsers also ask for /favicon.ico
 
   eleventyConfig.addFilter("abs", (url) => new URL(url || "/", site.url).href);

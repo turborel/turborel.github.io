@@ -193,7 +193,38 @@ function load() {
           return `https://github.com/${set.repo}/blob/${set.refName}/${inRepo}${hash}`;
         };
 
-        const env = { rewriteLink };
+        // Images in doc/ are copied to /docs/<version>/<set>/… by the build
+        // (eleventy.config.js), one copy per version that every tree of it
+        // shares. One named *-light.* or *-dark.* shows only in that theme
+        // (Studio's guide has a pair of each screenshot); the dark one, its
+        // alt often "The same, in the dark theme", takes its twin's alt.
+        const lightAlt = new Map();
+        const rewriteImage = (token, state) => {
+          const src = token.attrGet("src");
+          if (!src || /^([a-z][a-z0-9+.-]*:|\/\/|\/)/i.test(src)) return;
+          const inRepo = path.posix.normalize(path.posix.join("doc", dir, decodeURI(src)));
+          const relTarget = inRepo.slice(4);
+          if (!inRepo.startsWith("doc/") || !fs.existsSync(path.join(docRoot, relTarget))) {
+            if (isCanonicalTree || v.targets.length === 1) broken.push(`${v.id}: ${set.main ? "" : set.repo + " "}doc/${p.rel} → image ${src}`);
+            token.attrSet("src", `https://raw.githubusercontent.com/${set.repo}/${set.refName}/${inRepo}`);
+            return;
+          }
+          token.attrSet("src", encodeURI(`/docs/${v.id}/${join(set.base, relTarget)}`));
+          token.attrSet("loading", "lazy");
+          const m = /^(.*)-(light|dark)\.[a-z0-9]+$/i.exec(relTarget);
+          if (!m) return;
+          const [, stem, theme] = m;
+          token.attrJoin("class", `only-${theme.toLowerCase()}`);
+          const alt = token.children.map((c) => c.content).join("");
+          if (theme.toLowerCase() === "light") lightAlt.set(stem, alt);
+          else if (lightAlt.has(stem) && /^the same\b/i.test(alt)) {
+            const text = new state.Token("text", "", 0);
+            text.content = lightAlt.get(stem).replace(/\blight theme\b/i, "dark theme");
+            token.children = [text];
+          }
+        };
+
+        const env = { rewriteLink, rewriteImage };
         const tokens = md.parse(p.src, env);
         stripContentsLine(tokens);
 
