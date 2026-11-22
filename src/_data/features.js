@@ -8,7 +8,7 @@ export default [
   },
   {
     name: "Highly extensible",
-    text: "Nearly every part is a plug-in point: storage engines, index methods, data types, functions, optimizer rules, encodings, authentication and wire protocols. Each has a built-in version you can replace or add to, and a plug-in can also run as a program of its own, installed from a signed package.",
+    text: "Nearly every part is a plug-in point: storage engines, index methods, data types, functions, optimizer rules, encodings, authentication, wire protocols and more. Each has a built-in version you can replace or add to, and a plug-in can also run as a program of its own, installed from a signed package.",
   },
   {
     name: "Row and columnar engines",
