@@ -195,13 +195,24 @@ function load() {
 
         // Images in doc/ are copied to /docs/<version>/<set>/… by the build
         // (eleventy.config.js), one copy per version that every tree of it
-        // shares. One named *-light.* or *-dark.* shows only in that theme
-        // (Studio's guide has a pair of each screenshot); the dark one, its
-        // alt often "The same, in the dark theme", takes its twin's alt.
+        // shares. An image shows only in one theme when its src ends in
+        // GitHub's #gh-light-mode-only or #gh-dark-mode-only (Studio's
+        // screenshots come in such pairs), or else when it is named
+        // *-light.* or *-dark.*. In that older form the dark one's alt is
+        // often "The same, in the dark theme"; it takes its twin's alt.
         const lightAlt = new Map();
         const rewriteImage = (token, state) => {
-          const src = token.attrGet("src");
-          if (!src || /^([a-z][a-z0-9+.-]*:|\/\/|\/)/i.test(src)) return;
+          let src = token.attrGet("src");
+          if (!src) return;
+          const marker = /#gh-(light|dark)-mode-only$/i.exec(src);
+          if (marker) {
+            src = src.slice(0, marker.index);
+            token.attrSet("src", src);
+          }
+          if (/^([a-z][a-z0-9+.-]*:|\/\/|\/)/i.test(src)) {
+            if (marker) token.attrJoin("class", `only-${marker[1].toLowerCase()}`);
+            return;
+          }
           const inRepo = path.posix.normalize(path.posix.join("doc", dir, decodeURI(src)));
           const relTarget = inRepo.slice(4);
           if (!inRepo.startsWith("doc/") || !fs.existsSync(path.join(docRoot, relTarget))) {
@@ -211,12 +222,14 @@ function load() {
           }
           token.attrSet("src", encodeURI(`/docs/${v.id}/${join(set.base, relTarget)}`));
           token.attrSet("loading", "lazy");
-          const m = /^(.*)-(light|dark)\.[a-z0-9]+$/i.exec(relTarget);
-          if (!m) return;
-          const [, stem, theme] = m;
-          token.attrJoin("class", `only-${theme.toLowerCase()}`);
+          const named = /^(.*)-(light|dark)\.[a-z0-9]+$/i.exec(relTarget);
+          const theme = (marker ? marker[1] : named ? named[2] : "").toLowerCase();
+          if (!theme) return;
+          token.attrJoin("class", `only-${theme}`);
+          if (!named) return;
+          const stem = named[1];
           const alt = token.children.map((c) => c.content).join("");
-          if (theme.toLowerCase() === "light") lightAlt.set(stem, alt);
+          if (theme === "light") lightAlt.set(stem, alt);
           else if (lightAlt.has(stem) && /^the same\b/i.test(alt)) {
             const text = new state.Token("text", "", 0);
             text.content = lightAlt.get(stem).replace(/\blight theme\b/i, "dark theme");
