@@ -41,7 +41,7 @@ export default {
   ],
 
   kubernetes: [
-    { name: "Helm charts", repo: "turborel/charts", url: "https://charts.turborel.com/", description: "Runs turboreld as a StatefulSet, its database on a volume of its own.", install: "helm repo add turborel https://charts.turborel.com" },
+    { name: "Helm charts", repo: "turborel/charts", url: "https://charts.turborel.com/", description: "Runs turboreld as a StatefulSet, its database on a volume of its own.", install: "helm repo add Turborel https://charts.turborel.com" },
     { name: "Operator", label: "Kubernetes operator", repo: "turborel/turborel-operator", url: gh("turborel-operator"), docs: "kubernetes/operator", description: "A Kubernetes operator for running Turborel." },
   ],
 

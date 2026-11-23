@@ -1,4 +1,4 @@
-// The rolling "nightly" pre-release of turborel (its date, commit and
+// The rolling "nightly" pre-release of Turborel (its date, commit and
 // downloads), as written by scripts/fetch-docs.js; null when there is none
 // (or when fetch-docs hasn't run, or GitHub couldn't be reached).
 import fs from "node:fs";

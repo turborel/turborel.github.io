@@ -3,7 +3,7 @@
 // src/assets/cli-shot.html at twice its size, on a transparent background
 // (the window's shadow included). Edit the HTML, then: npm run cli-shot
 //
-// The HTML holds a real session of the turborel client, pasted in as it
+// The HTML holds a real session of the Turborel client, pasted in as it
 // printed. Drives Google Chrome / Chromium over the DevTools protocol (no
 // extra packages). Set CHROME=/path/to/chrome if it isn't on the PATH.
 import { spawn, execSync } from "node:child_process";

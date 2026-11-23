@@ -1,4 +1,4 @@
-# turborel web
+# Turborel web
 
 The home page, the documentation and the blog of
 [turborel](https://github.com/turborel/turborel), built with

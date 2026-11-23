@@ -7,7 +7,7 @@
   eleventyComputed: {
     title: (data) => (data.pagination.pageNumber === 0 ? "Blog — Turborel" : `Blog, page ${data.pagination.pageNumber + 1} — Turborel`),
     description: () => "Releases, design notes and the reasoning behind them, from the people building turborel.",
-    crumbs: (data) => [{ label: "turborel blog", url: data.pagination.pageNumber ? "/blog/" : null }, { label: "All posts" }],
+    crumbs: (data) => [{ label: "Turborel blog", url: data.pagination.pageNumber ? "/blog/" : null }, { label: "All posts" }],
     related: () => [{ label: "tags", url: "/blog/tags/" }, { label: "atom feed", url: "/blog/feed.xml" }],
     prevUrl: (data) => data.pagination.href.previous,
     nextUrl: (data) => data.pagination.href.next,

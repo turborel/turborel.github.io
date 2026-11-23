@@ -294,7 +294,7 @@ function load() {
         if (v.kind === "alpha") {
           banner = {
             title: "Alpha",
-            text: `These pages are built from ${set.main ? "" : set.name + "’s "}${set.refName}, turborel 0.0.0. Anything may change from one build to the next: SQL, API, protocol and files alike.`,
+            text: `These pages are built from ${set.main ? "" : set.name + "’s "}${set.refName}, Turborel 0.0.0. Anything may change from one build to the next: SQL, API, protocol and files alike.`,
           };
         } else if (v.kind === "dev") {
           banner = {
@@ -331,7 +331,7 @@ function load() {
           permalink: `/docs/${v.id}/` + (p.pagePath ? p.pagePath + "/" : ""),
           permalinkNote:
             v.kind === "release"
-              ? `This page in turborel ${v.title}; the link stays on this release after newer ones`
+              ? `This page in Turborel ${v.title}; the link stays on this release after newer ones`
               : `This page as built from ${set.refName}; it changes as ${set.refName} does`,
           sourceUrl: `https://github.com/${set.repo}/blob/${set.refName}/doc/${p.rel}`,
           source: { repo: set.repo, refName: set.refName, sha: set.sha, date: set.date },

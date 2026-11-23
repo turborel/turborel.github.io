@@ -20,12 +20,12 @@ eleventyExcludeFromCollections: true
     <meta property="og:image" content="https://turborel.com/assets/og-image.png">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="The turborel mascot and name">
+    <meta property="og:image:alt" content="The Turborel mascot and name">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="color-scheme" content="light dark">
     <meta name="theme-color" content="#5C282B" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#120D0E" media="(prefers-color-scheme: dark)">
-    <link rel="alternate" type="application/atom+xml" title="The turborel blog" href="/blog/feed.xml">
+    <link rel="alternate" type="application/atom+xml" title="The Turborel blog" href="/blog/feed.xml">
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XDW3XF90B8"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -1443,7 +1443,7 @@ eleventyExcludeFromCollections: true
                         {%- if nightly %}
                         <li class="nightly">
                             <time datetime="{{ nightly.date | isoDate }}">{{ nightly.date | longDate }} &middot; nightly build</time>
-                            <a class="title" href="{{ nightly.url }}">turborel nightly</a>
+                            <a class="title" href="{{ nightly.url }}">Turborel nightly</a>
                             <p>Built from <code>main</code>{% if nightly.sha %} at <a href="{{ site.github }}/commit/{{ nightly.sha }}">{{ nightly.sha }}</a>{% endif %} once it passed every check. Anything may change from one build to the next.</p>
                             {%- if nightly.downloads.length %}
                             <p class="get">{% for d in nightly.downloads %}{% set os = "linux" if "Linux" in d.platform else ("apple" if "macOS" in d.platform else ("windows" if "Windows" in d.platform else "")) %}<a href="{{ d.url }}" title="{{ d.name }}">{{ os | icon(14) | safe }}{{ d.platform }}</a>{% endfor %}<a href="https://github.com/turborel/turborel/pkgs/container/turborel" title="Built from the latest main, for amd64 and arm64">{{ "docker" | icon(14) | safe }}Container</a></p>
@@ -1472,7 +1472,7 @@ eleventyExcludeFromCollections: true
                         {%- for r in rels %}
                         <li>
                             <time datetime="{{ r.date | isoDate }}">{{ r.date | longDate }}{% if r.prerelease %} &middot; pre-release{% endif %}</time>
-                            <a class="title" href="{{ r.url }}">turborel {{ r.version }}{% if r.codename %} &ldquo;{{ r.codename }}&rdquo;{% endif %}</a>
+                            <a class="title" href="{{ r.url }}">Turborel {{ r.version }}{% if r.codename %} &ldquo;{{ r.codename }}&rdquo;{% endif %}</a>
                             {%- if loop.first and not r.prerelease %}<span class="latest">Latest</span>{% endif %}
                             <p><a href="{{ r.url }}">Release notes</a></p>
                         </li>
@@ -1480,7 +1480,7 @@ eleventyExcludeFromCollections: true
                     </ul>
                     {%- endif %}
                     {%- if not rels.length %}
-                    <p class="empty">No numbered releases yet. turborel is in alpha{% if nightly %}: the nightly above is the way to try it, and the{% else %}, and everything is built from the <code>{{ docs.latest.refName if docs.latest else "main" }}</code> branch{% if docs.latest and docs.latest.sha %}, currently at commit <a href="{{ site.github }}/commit/{{ docs.latest.sha }}">{{ docs.latest.sha }}</a> ({{ docs.latest.date | longDate }}){% endif %}. The{% endif %} <a href="/docs/">documentation</a> follows <code>main</code> as it changes.</p>
+                    <p class="empty">No numbered releases yet. Turborel is in alpha{% if nightly %}: the nightly above is the way to try it, and the{% else %}, and everything is built from the <code>{{ docs.latest.refName if docs.latest else "main" }}</code> branch{% if docs.latest and docs.latest.sha %}, currently at commit <a href="{{ site.github }}/commit/{{ docs.latest.sha }}">{{ docs.latest.sha }}</a> ({{ docs.latest.date | longDate }}){% endif %}. The{% endif %} <a href="/docs/">documentation</a> follows <code>main</code> as it changes.</p>
                     <p class="empty">Subscribe to the <a href="{{ site.newsletter }}">newsletter</a> to hear when the first release is out.</p>
                     {%- endif %}
                     <p class="more"><a href="{{ site.github }}/releases">All releases on GitHub &raquo;</a></p>

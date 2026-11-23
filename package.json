@@ -1,7 +1,7 @@
 {
   "name": "turborel-site",
   "private": true,
-  "description": "turborel home page, versioned documentation and blog",
+  "description": "Turborel home page, versioned documentation and blog",
   "type": "module",
   "scripts": {
     "fetch-docs": "node scripts/fetch-docs.js",

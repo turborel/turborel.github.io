@@ -2,7 +2,7 @@ export default {
   name: "turborel",
   url: "https://turborel.com",
   description:
-    "turborel is an open-source, extensible relational database system written in Rust.",
+    "Turborel is an open-source, extensible relational database system written in Rust.",
   repo: "turborel/turborel",
   github: "https://github.com/turborel/turborel",
   newsletter: "https://forms.gle/YNJ5YGpBTFW9vvTj8",
@@ -29,7 +29,7 @@ export default {
   },
   analytics: "G-XDW3XF90B8", // Google Analytics, as on the home page; "" to drop it
   author: "Turborel contributors",
-  // The copyright holder (as in the turborel repo's LICENSE) and owner of
+  // The copyright holder (as in the Turborel repo's LICENSE) and owner of
   // the name and logos; shown in every page's footer.
   company: "Turborel Inc.",
   homePosts: 3, // newest blog posts listed on the home page

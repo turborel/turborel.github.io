@@ -174,7 +174,7 @@ export default {
     postAttachments,
     canonical: (data) => `/blog/${data.page.fileSlug}/`,
     crumbs: (data) => [
-      { label: "turborel blog", url: "/blog/" },
+      { label: "Turborel blog", url: "/blog/" },
       { label: String(data.page.date.getUTCFullYear()), url: `/blog/#y${data.page.date.getUTCFullYear()}` },
       { label: data.title },
     ],

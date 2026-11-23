@@ -1,4 +1,4 @@
-// Every turborel release, newest first, as written by scripts/fetch-docs.js.
+// Every Turborel release, newest first, as written by scripts/fetch-docs.js.
 // Empty until the first release (or when fetch-docs hasn't run).
 import fs from "node:fs";
 import path from "node:path";
