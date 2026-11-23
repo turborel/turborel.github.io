@@ -338,7 +338,15 @@ function load() {
           // A driver's or Studio's own links, for the sidebar.
           setNav: set.main ? null : { label: set.label, repo: set.repo, home: target + setRoot, installing: installing ? target + installing + "/" : null },
           // On the server docs' contents page: the drivers' and Studio's docs.
-          sets: set.main && isRoot ? v.docSets.filter((x) => !x.main).map((x) => ({ label: x.label, name: x.name, url: target + x.base + "/" })) : null,
+          // The drivers by language, then the tools (Studio, the operator).
+          sets: set.main && isRoot ? (() => {
+            const others = v.docSets.filter((x) => !x.main);
+            const link = (x, label) => ({ label, url: target + x.base + "/" });
+            return [
+              { title: "Drivers", items: others.filter((x) => x.base.startsWith("drivers/")).map((x) => link(x, x.label.replace(/ driver$/, ""))) },
+              { title: "Tools", items: others.filter((x) => !x.base.startsWith("drivers/")).map((x) => link(x, x.label)) },
+            ].filter((g) => g.items.length);
+          })() : null,
           version: { id: v.id, label: v.label, title: v.title, codename: v.codename || null, sub: v.sub, kind: v.kind, sha: v.sha, date: v.date, refName: v.refName },
         });
       });

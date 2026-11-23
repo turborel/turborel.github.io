@@ -132,10 +132,10 @@
       {{ doc.html | safe }}
       {%- if doc.sets and doc.sets.length %}
       <h2 id="drivers-and-tools">Drivers and tools</h2>
-      <p>Each has it's own documentation, released with this version of Turborel.</p>
+      <p>Each has its own documentation, released with this version of Turborel.</p>
       <ul class="doc-sets">
-        {%- for x in doc.sets %}
-        <li><a href="{{ x.url }}">{{ x.label }}</a> <span class="muted">{{ x.name }}</span></li>
+        {%- for g in doc.sets %}
+        <li><strong>{{ g.title }}:</strong> {% for x in g.items %}<a href="{{ x.url }}">{{ x.label }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</li>
         {%- endfor %}
       </ul>
       {%- endif %}
