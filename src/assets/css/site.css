@@ -244,12 +244,12 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
 /* syntax colours (Prism tokens, highlighted at build time) */
 .token.keyword, .token.important, .token.selector { color: #8A2600; font-weight: 600; }
 .token.string, .token.char, .token.attr-value, .token.regex { color: #2F5A86; }
-.token.number, .token.boolean, .token.constant { color: #3B6A2E; }
+.token.number, .token.boolean, .token.constant, .token.symbol { color: #3B6A2E; }
 .token.comment, .token.prolog, .token.doctype, .token.cdata { color: #7A6D66; font-style: italic; }
 .token.function, .token.macro, .token.property { color: #6A3D8F; }
 .token.builtin, .token.class-name, .token.type-definition { color: #7A4A00; }
 .token.operator, .token.punctuation { color: #4E4442; }
-.token.variable, .token.lifetime-annotation, .token.attribute { color: #8A2600; }
+.token.variable, .token.lifetime-annotation, .token.attribute, .token.annotation, .token.decorator { color: #8A2600; }
 .token.table, .token.key { color: #2E1214; font-weight: 600; }
 .token.deleted { color: #A3201A; }
 .token.inserted { color: #2E6B2E; }
@@ -406,12 +406,12 @@ pre.code.output { background: var(--out-bg); border-color: var(--rule); }
 
   :where(:root[data-theme="dark"]) .token.keyword, :where(:root[data-theme="dark"]) .token.important, :where(:root[data-theme="dark"]) .token.selector { color: #F0956A; }
   :where(:root[data-theme="dark"]) .token.string, :where(:root[data-theme="dark"]) .token.char, :where(:root[data-theme="dark"]) .token.attr-value, :where(:root[data-theme="dark"]) .token.regex { color: #8DB8E8; }
-  :where(:root[data-theme="dark"]) .token.number, :where(:root[data-theme="dark"]) .token.boolean, :where(:root[data-theme="dark"]) .token.constant { color: #9CCB8A; }
+  :where(:root[data-theme="dark"]) .token.number, :where(:root[data-theme="dark"]) .token.boolean, :where(:root[data-theme="dark"]) .token.constant, :where(:root[data-theme="dark"]) .token.symbol { color: #9CCB8A; }
   :where(:root[data-theme="dark"]) .token.comment, :where(:root[data-theme="dark"]) .token.prolog, :where(:root[data-theme="dark"]) .token.doctype, :where(:root[data-theme="dark"]) .token.cdata { color: #8E807A; }
   :where(:root[data-theme="dark"]) .token.function, :where(:root[data-theme="dark"]) .token.macro, :where(:root[data-theme="dark"]) .token.property { color: #C9A3E6; }
   :where(:root[data-theme="dark"]) .token.builtin, :where(:root[data-theme="dark"]) .token.class-name, :where(:root[data-theme="dark"]) .token.type-definition { color: #E3B868; }
   :where(:root[data-theme="dark"]) .token.operator, :where(:root[data-theme="dark"]) .token.punctuation { color: #C4B6B0; }
-  :where(:root[data-theme="dark"]) .token.variable, :where(:root[data-theme="dark"]) .token.lifetime-annotation, :where(:root[data-theme="dark"]) .token.attribute { color: #F0956A; }
+  :where(:root[data-theme="dark"]) .token.variable, :where(:root[data-theme="dark"]) .token.lifetime-annotation, :where(:root[data-theme="dark"]) .token.attribute, :where(:root[data-theme="dark"]) .token.annotation, :where(:root[data-theme="dark"]) .token.decorator { color: #F0956A; }
   :where(:root[data-theme="dark"]) .token.table, :where(:root[data-theme="dark"]) .token.key { color: #F3E7E0; }
   :where(:root[data-theme="dark"]) .token.deleted { color: #F08080; }
   :where(:root[data-theme="dark"]) .token.inserted { color: #8FCB8F; }
