@@ -70,8 +70,8 @@ function cmp(a, b) {
 function inlineText(token) {
   if (!token || !token.children) return token ? token.content : "";
   return token.children
-    .filter((c) => c.type === "text" || c.type === "code_inline")
-    .map((c) => c.content)
+    .filter((c) => c.type === "text" || c.type === "code_inline" || c.type === "softbreak" || c.type === "hardbreak")
+    .map((c) => (c.type.endsWith("break") ? " " : c.content))
     .join("")
     .trim();
 }
@@ -145,7 +145,7 @@ function load() {
     const fileToPath = new Map(set.files.map((f) => [f, join(set.base, pagePathOf(f))]));
     const setRoot = set.base ? set.base + "/" : "";
     const installing = [...fileToPath.values()].find((pp) => pp === join(set.base, "user/installing"));
-    const setTitle = set.main ? `Turborel ${v.title} documentation` : `${set.name} ${v.title} documentation`;
+    const setTitle = set.main ? `Turborel ${v.title} documentation` : `Turborel ${set.label} ${v.title} documentation`;
 
     // Parse every file once per version.
     const parsed = set.files.map((rel) => {
