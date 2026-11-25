@@ -1332,7 +1332,7 @@ eleventyExcludeFromCollections: true
                         <circle class="socket" cx="{{ j.x }}" cy="{{ j.y }}" r="{{ L.sock }}"/>
                         <circle cx="{{ j.x }}" cy="{{ j.y }}" r="{{ L.sock * 0.4 }}" fill="{{ j.color }}"/>
                         <text class="lang" x="{{ j.tx }}" y="{{ j.ty }}" text-anchor="{{ j.anchor }}">{{ j.label }}</text>
-                        <text class="sub mono" x="{{ j.tx }}" y="{{ j.sy }}" text-anchor="{{ j.anchor }}">{{ j.sub }}</text>
+                        {% if j.sub %}<text class="sub mono" x="{{ j.tx }}" y="{{ j.sy }}" text-anchor="{{ j.anchor }}">{{ j.sub }}</text>{% endif %}
                     </a>
                     {%- endfor %}
                 </svg>

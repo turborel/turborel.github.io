@@ -35,8 +35,8 @@ function cylinder(x, y, top, pid) {
 
 function entries() {
   return [
-    { label: ecosystem.builtin.language, sub: "built in · turborel", url: ecosystem.builtin.url, native: true },
-    ...ecosystem.official.map((d) => ({ label: d.language, sub: d.repo.split("/")[1], url: docsUrl(d) })),
+    { label: ecosystem.builtin.language, sub: "built in", url: ecosystem.builtin.url, native: true },
+    ...ecosystem.official.map((d) => ({ label: d.language, url: docsUrl(d) })),
   ].map((d, i) => ({ ...d, color: d.native ? "#FFFFFF" : COLORS[(i - 1) % COLORS.length] }));
 }
 
@@ -55,7 +55,7 @@ function wide(list) {
     const [ex, ey] = pt(left ? 180 + ((n - 1) / 2 - k) * step : (k - (n - 1) / 2) * step);
     const c1 = left ? x + 120 : x - 120, c2 = left ? ex - 90 : ex + 90;
     return {
-      ...d, x, y, end: [ex, ey], tx: left ? x - 22 : x + 22, ty: y + 2, sy: y + 18, anchor: left ? "end" : "start",
+      ...d, x, y, end: [ex, ey], tx: left ? x - 22 : x + 22, ty: d.sub ? y + 2 : y + 7, sy: y + 18, anchor: left ? "end" : "start",
       cable: `M${x},${y} C${c1},${y} ${c2},${ey} ${ex},${ey}`,
     };
   });
@@ -78,7 +78,7 @@ function tall(list) {
     const deg = left ? 128 + k * (44 / Math.max(1, rows - 1)) : 52 - k * (44 / Math.max(1, rows - 1));
     const ex = f(cx + r * Math.cos(rad(deg))), ey = f(cy + r * Math.sin(rad(deg)));
     return {
-      ...d, x, y, end: [ex, ey], tx: left ? x + 24 : x - 24, ty: y + 2, sy: y + 26, anchor: left ? "start" : "end",
+      ...d, x, y, end: [ex, ey], tx: left ? x + 24 : x - 24, ty: d.sub ? y + 2 : y + 9, sy: y + 26, anchor: left ? "start" : "end",
       cable: `M${left ? x - sock : x + sock},${y} H${lane} V${f(ey + 40)} Q${lane},${ey} ${ex},${ey}`,
     };
   });
