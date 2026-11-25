@@ -708,8 +708,8 @@ eleventyExcludeFromCollections: true
         }
 
         /* the still life: Memphis-style shapes around a database cylinder.
-           Each .layer moves with the scroll at its own depth (script below);
-           the .float inside it drifts slowly on its own. */
+           Each .layer moves with the scroll, at its own depth (script below),
+           and keeps still otherwise. */
         .still-life {
             display: block;
             width: 100%;
@@ -723,27 +723,6 @@ eleventyExcludeFromCollections: true
             transform-box: fill-box;
             transform-origin: center;
             will-change: transform;
-        }
-
-        .still-life .float {
-            transform-box: fill-box;
-            transform-origin: center;
-            animation: still-float 6s ease-in-out infinite alternate;
-        }
-
-        .still-life .f2 { animation-duration: 7.5s; animation-delay: -2s; }
-        .still-life .f3 { animation-duration: 5.2s; animation-delay: -1s; }
-        .still-life .f4 { animation-duration: 8s; animation-delay: -3s; }
-
-        @keyframes still-float {
-            from { transform: translateY(-5px) rotate(-2deg); }
-            to { transform: translateY(5px) rotate(2deg); }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-            .still-life .float {
-                animation: none;
-            }
         }
 
         /* the notice bar across the top (site.notice); closable */
@@ -1178,26 +1157,26 @@ eleventyExcludeFromCollections: true
                     shapes. data-depth: how fast a shape rises against the scroll;
                     data-dx: sideways drift; data-spin: degrees per 100px.
                     .wide pieces are hidden on phones. #}
-                <svg class="still-life" viewBox="0 0 520 330" role="img" aria-label="A database cylinder among drifting geometric shapes">
+                <svg class="still-life" viewBox="0 0 520 330" role="img" aria-label="A database cylinder among geometric shapes">
                     <defs>
                         <pattern id="sl-dots" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.6" fill="#5C282B"/></pattern>
                         <pattern id="sl-hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#F1DDD2" stroke-width="3"/></pattern>
                     </defs>
-                    <g class="layer" data-depth="0.55" data-dx="0.25" data-spin="4"><g class="float f2"><path d="M330 40 A 70 70 0 0 1 470 40 Z" fill="#E58A5C"/></g></g>
-                    <g class="layer" data-depth="0.35" data-dx="-0.3" data-spin="-3"><g class="float f4"><rect x="58" y="70" width="96" height="96" fill="url(#sl-hatch)"/></g></g>
-                    <g class="layer" data-depth="0.08" data-dx="0" data-spin="0"><g class="float">
+                    <g class="layer" data-depth="0.55" data-dx="0.25" data-spin="4"><path d="M330 40 A 70 70 0 0 1 470 40 Z" fill="#E58A5C"/></g>
+                    <g class="layer" data-depth="0.35" data-dx="-0.3" data-spin="-3"><rect x="58" y="70" width="96" height="96" fill="url(#sl-hatch)"/></g>
+                    <g class="layer" data-depth="0.08" data-dx="0" data-spin="0">
                         <path d="M190 110 L190 260 A 75 22 0 0 0 340 260 L340 110" fill="#F1DDD2"/>
                         <rect x="190" y="110" width="150" height="150" fill="url(#sl-dots)" opacity=".45"/>
                         <path d="M190 160 A 75 22 0 0 0 340 160 M190 210 A 75 22 0 0 0 340 210" fill="none" stroke="#5C282B" stroke-width="3"/>
                         <ellipse cx="265" cy="110" rx="75" ry="22" fill="#F4B08A"/>
-                    </g></g>
-                    <g class="layer" data-depth="0.7" data-dx="0.35" data-spin="0"><g class="float f3"><path d="M372 230 l18 -16 18 16 18 -16 18 16 18 -16 18 16" fill="none" stroke="#F4B08A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g></g>
-                    <g class="layer wide" data-depth="0.5" data-dx="-0.4" data-spin="6"><g class="float f2"><path d="M86 300 L120 240 L154 300 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></g></g>
-                    <g class="layer" data-depth="0.45" data-dx="0.2" data-spin="0"><g class="float f4"><circle cx="420" cy="140" r="26" fill="none" stroke="#F1DDD2" stroke-width="3"/><circle cx="420" cy="140" r="9" fill="#FFFFFF"/></g></g>
-                    <g class="layer" data-depth="0.9" data-dx="0" data-spin="8"><g class="float f3" stroke-linecap="round" stroke-width="5">
+                    </g>
+                    <g class="layer" data-depth="0.7" data-dx="0.35" data-spin="0"><path d="M372 230 l18 -16 18 16 18 -16 18 16 18 -16 18 16" fill="none" stroke="#F4B08A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g>
+                    <g class="layer wide" data-depth="0.5" data-dx="-0.4" data-spin="6"><path d="M86 300 L120 240 L154 300 Z" fill="none" stroke="#FFFFFF" stroke-width="3" stroke-linejoin="round"/></g>
+                    <g class="layer" data-depth="0.45" data-dx="0.2" data-spin="0"><circle cx="420" cy="140" r="26" fill="none" stroke="#F1DDD2" stroke-width="3"/><circle cx="420" cy="140" r="9" fill="#FFFFFF"/></g>
+                    <g class="layer" data-depth="0.9" data-dx="0" data-spin="8" stroke-linecap="round" stroke-width="5">
                         <line x1="170" y1="60" x2="182" y2="48" stroke="#FFFFFF"/><line x1="380" y1="300" x2="396" y2="294" stroke="#E58A5C"/>
                         <line class="wide" x1="40" y1="200" x2="44" y2="214" stroke="#F4B08A"/><line x1="470" y1="210" x2="484" y2="220" stroke="#F1DDD2"/>
-                    </g></g>
+                    </g>
                 </svg>
                 <script>
                 // The shapes come apart at different depths as the cover scrolls away.
